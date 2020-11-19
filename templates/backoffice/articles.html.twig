@@ -5,7 +5,7 @@
 {% block body %}
     <ul>
     {% for article in articles %}
-        <li>{{ article.title }}</li>
+        <li>{{ article.title }} <a href="{{ path('editArticle', {'idArticle': article.id}) }}"><button class="btn btn-info" type="button">edit</button></a> </li>
     {% endfor %}
     </ul>
     <a href="{{ path('backofficeAddArticle') }}">Ajouter un article</a>

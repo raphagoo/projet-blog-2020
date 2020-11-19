@@ -37,4 +37,21 @@ class ArticleManager
         $this->em->persist($article);
         $this->em->flush();
     }
+
+    /**
+     * @param $idArticle
+     * @return Article|null
+     */
+    public function findArticleById($idArticle){
+        return $this->em->getRepository(Article::class)->find($idArticle);
+    }
+
+    /**
+     * @param $article
+     */
+    public function deleteArticle($article)
+    {
+        $this->em->remove($article);
+        $this->em->flush();
+    }
 }
