@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Backoffice - Article{% endblock %}
+
+{% block body %}
+    <ul>
+    {% for article in articles %}
+        <li>{{ article.title }}</li>
+    {% endfor %}
+    </ul>
+    <a href="{{ path('backofficeAddArticle') }}">Ajouter un article</a>
+{% endblock %}
