@@ -1,9 +1,10 @@
 
 ###> symfony/framework-bundle ###
-./migrations
+/migrations
 /.idea
 /public/uploads
 .env
+/.env
 /.env.local
 /.env.local.php
 /.env.*.local
