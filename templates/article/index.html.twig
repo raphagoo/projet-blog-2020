@@ -8,24 +8,29 @@
     <h3>{{ article.subtitle }}</h3>
     <p>{{ article.content }}</p>
     <span>Category : {{ article.category.name }}</span>
-    <div>
-        <span>Send a comment :</span><br>
-        <label for="lastName">lastName</label>
-        <input name="lastName" type="text" disabled value="{{ comment.author.lastName }}">
-        <label for="email">email</label>
-        <input name="email" type="text" disabled value="{{ comment.author.email }}">
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
-    </div>
+    {% if app.user %}
+        <div>
+
+            <span>Send a comment :</span><br>
+            <label for="lastName">lastName</label>
+            <input name="lastName" type="text" disabled value="{{ comment.author.lastName }}">
+            <label for="email">email</label>
+            <input name="email" type="text" disabled value="{{ comment.author.email }}">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    {% endif %}
 
     <ul>
     {% for comment in commentList %}
         {% if comment.approved == true %}
             <li> {{ comment.author.email }} - {{ comment.content }}</li>
         {% endif %}
-        {% if comment.approved == null and app.user.email == comment.author.email %}
-            <span>{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}} - Your comment is awaiting verification</span>
+        {% if app.user %}
+            {% if comment.approved == null and app.user.email == comment.author.email %}
+                <span>{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}} - Your comment is awaiting verification</span>
+            {% endif %}
         {% endif %}
     {% endfor %}
     </ul>
