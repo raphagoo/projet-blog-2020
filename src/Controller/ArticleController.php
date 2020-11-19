@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\BL\ArticleManager;
+use App\BL\CommentManager;
 use App\BL\UserManager;
 use App\Entity\Article;
+use App\Entity\Comment;
 use App\Form\ArticleFormType;
+use App\Form\CommentFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -15,6 +18,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class ArticleController extends AbstractController
 {
@@ -30,20 +34,47 @@ class ArticleController extends AbstractController
      * @var UserManager
      */
     private $userManager;
+    /**
+     * @var CommentManager
+     */
+    private $commentManager;
 
     public function __construct(EntityManagerInterface $em)
     {
 
         $this->articleManager = new ArticleManager($em);
         $this->userManager = new UserManager($em);
+        $this->commentManager = new CommentManager($em);
         $this->em = $em;
     }
 
     /**
-     * @Route("/article", name="indexArticle")
+     * @Route("/article/{idArticle}", name="viewArticle")
+     * @param $idArticle
+     * @param Request $request
+     * @param Security $security
+     * @return Response
      */
-    public function index(){
-        return $this->render('article/index.html.twig', ['controller_name' => 'ArticleController']);
+    public function viewArticle($idArticle, Request $request, Security $security){
+        $article = $this->articleManager->findArticleById($idArticle);
+
+        $date = $article->getPublicationDate();
+        $stringDate = $date->format('Y-m-d H:i:s');
+
+        $comments = $article->getComments();
+        $comment = new Comment();
+        $comment->setArticle($article);
+        $comment->setAuthor($security->getUser());
+
+        $form = $this->createForm(CommentFormType::class, $comment);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $comment->setCreationDate(new \DateTime('now'));
+            $this->commentManager->saveData($comment);
+            return $this->redirectToRoute('viewArticle');
+        }
+
+        return $this->render('article/index.html.twig', ['article' => $article, 'stringDate' => $stringDate, 'form' => $form->createView(), 'comment' => $comment, 'commentList' => $comments]);
     }
 
     /**
@@ -144,7 +175,7 @@ class ArticleController extends AbstractController
             return $this->redirectToRoute('index');
         }
         return $this->render('article/editArticle.html.twig', [
-            'form' => $form->createView(), 'image' => $oldFilename
+            'form' => $form->createView(), 'image' => $oldFilename, 'article' => $article
         ]);
     }
 

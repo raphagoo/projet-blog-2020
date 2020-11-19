@@ -3,18 +3,30 @@
 {% block title %}Hello ArticleController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{{ article.author.email }} {{ stringDate }}
+    <h2>{{ article.title }}</h2>
+    <h3>{{ article.subtitle }}</h3>
+    <p>{{ article.content }}</p>
+    <span>Category : {{ article.category.name }}</span>
+    <div>
+        <span>Send a comment :</span><br>
+        <label for="lastName">lastName</label>
+        <input name="lastName" type="text" disabled value="{{ comment.author.lastName }}">
+        <label for="email">email</label>
+        <input name="email" type="text" disabled value="{{ comment.author.email }}">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
     <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/symfony/projet-blog/src/Controller/ArticleController.php'|file_link(0) }}">src/Controller/ArticleController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/symfony/projet-blog/templates/article/index.html.twig'|file_link(0) }}">templates/article/index.html.twig</a></code></li>
+    {% for comment in commentList %}
+        {% if comment.approved == true %}
+            <li> {{ comment.author.email }} - {{ comment.content }}</li>
+        {% endif %}
+        {% if comment.approved == null and app.user.email == comment.author.email %}
+            <span>{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}} - Your comment is awaiting verification</span>
+        {% endif %}
+    {% endfor %}
     </ul>
-</div>
 {% endblock %}
