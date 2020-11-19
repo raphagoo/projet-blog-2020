@@ -5,8 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-use App\Form\ContactFromType;
+use App\Form\ContactFormType;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends AbstractController
 {
@@ -33,12 +33,24 @@ class DefaultController extends AbstractController
     /**
      * @Route("/contact", name="contact")
      */
-    public function contact(): Response
+    public function contact(Request $request): Response
     {
-        // $form = $this->createForm(ContactFormType::class);
+        $form = $this->createForm(ContactFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $this->addFlash(
+                'info',
+                'Message sumbit'
+            );
+        }
+
         return $this->render('default/contact.html.twig', [
             'controller_name' => 'DefaultController',
-            // 'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+
+    
 }
