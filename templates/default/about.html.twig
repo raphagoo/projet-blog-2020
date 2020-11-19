@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AboutController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .para{ padding-top: 5%;}
+    img{ width: 50%; padding-top: 5%;}
+</style>
+
+<div class="example-wrapper">
+    <h1>About us :</h1>
+<div>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu dui eros. Donec lacinia, erat nec molestie venenatis, nibh mauris rutrum massa, ac fringilla leo lorem quis ex. Nullam ut turpis consectetur, elementum ipsum non, facilisis odio. Praesent hendrerit cursus velit nec feugiat. Phasellus ut orci augue. Donec finibus sem sit amet turpis fermentum ultrices. Pellentesque maximus placerat tortor at vestibulum. Donec non nibh efficitur, tempor leo vitae, aliquet mauris. Maecenas luctus lacus quis nisi facilisis, non porttitor augue dictum. Vivamus a aliquam metus, a viverra purus. Sed euismod condimentum est.
+</div>
+
+<div class="para">
+Proin id velit gravida, interdum orci sit amet, finibus neque. Ut id malesuada justo. Nullam eleifend dignissim tempor. Morbi ut euismod nulla. Proin lobortis magna non lorem volutpat mollis. Donec posuere velit id lectus venenatis fermentum. Donec eleifend, tellus nec cursus commodo, neque libero elementum neque, id mollis nunc sem in dolor. Praesent at condimentum dolor.
+</div >
+
+<div class="para">
+Sed ac justo metus. Aliquam in molestie lectus. Maecenas ligula ligula, bibendum eu odio at, blandit finibus ipsum. Vivamus vel dictum massa. Phasellus rutrum ipsum vehicula elit ultrices auctor. Nam a cursus risus. Sed quis neque sed tortor feugiat scelerisque. In facilisis, odio et tristique pellentesque, dolor erat posuere nulla, dapibus laoreet dolor dui eget purus. Aliquam non fermentum tortor. Morbi nisi arcu, viverra at scelerisque at, condimentum et nisi. Donec consectetur, erat maximus faucibus egestas, justo mi pulvinar lectus, in maximus turpis libero id quam. Nam et leo non metus vestibulum laoreet. Sed tempus eleifend porttitor.
+</div>
+
+<div class="para">
+Nam eget malesuada turpis, eget efficitur lorem. Vestibulum viverra fringilla erat. Aenean et semper nisl. Morbi quis ullamcorper lorem. Curabitur faucibus neque a finibus fermentum. Aliquam at venenatis massa. Nulla vulputate faucibus urna vel iaculis. In pretium vitae orci sed pharetra. Praesent ut massa velit. Praesent a sem at dui faucibus maximus. Phasellus eget rutrum leo. Phasellus vestibulum scelerisque nisi, sed porttitor ante accumsan at. Suspendisse eu suscipit nisi. In hac habitasse platea dictumst. Morbi et nibh neque.
+</div>
+
+
+<img src="{{ asset('/images/about.jpg') }}"  alt="imageAbout">
+
+</div>
+{% endblock %}
