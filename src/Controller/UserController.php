@@ -7,6 +7,7 @@ use App\Form\Model\ChangePassword;
 use App\Form\UserCreateType;
 use App\Form\UserUpdateType;
 use App\Repository\UserRepository;
+use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -108,5 +109,22 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'user' => $user
         ));
+    }
+
+    /**
+     * @Route("/profile/likedArticles", name="profile_liked_articles")
+     * @param Request $request
+     * @return Response
+     */
+    public function profileLikedArticles(Request $request, ArticleRepository $articleRepository): Response
+    {
+        $user = $this->getUser();
+        $test = $articleRepository->findLikedArticles();
+        dump($test);
+
+
+        return $this->render('user/edit.html.twig', [
+            'user' => $user,
+        ]);
     }
 }

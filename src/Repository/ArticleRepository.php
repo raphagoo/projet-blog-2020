@@ -65,6 +65,35 @@ class ArticleRepository extends ServiceEntityRepository
     // /**
     //  * @return Article[] Returns an array of Article objects
     //  */
+
+    public function findLikedArticles()
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT a FROM App\Entity\Article a, App\Entity\Like l WHERE a.id = l.article'
+        );
+
+        // returns an array of Product objects
+        return $query->getResult();
+    }
+    // $qb = $this->_em->createQueryBuilder();
+    // $qb->select('t, c')
+    //     ->from('AppBundle:Transactional','t')
+    //     ->join('t.fkCustomer', 'c');
+
+    // return $qb->getQuery()->execute();
+
+
+    //     SELECT article.* FROM article , like
+    // WHERE like.Article =:article AND like.user = :user
+
+
+
+
+    // /**
+    //  * @return Article[] Returns an array of Article objects
+    //  */
     /*
     public function findByExampleField($value)
     {
