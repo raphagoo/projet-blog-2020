@@ -33,7 +33,7 @@
 					</div>
 				</li>
 
-        <li class="nav-item dropdown">
+				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						User
 					</a>
@@ -43,31 +43,31 @@
 				</li>
 			{% endif %}
 		</ul>
-		
-<form class="form-inline my-2 my-lg-0">
-		<ul class="navbar-nav push-right mx-5">
-			{% if app.user %}
 
-<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						{{app.user.email}}
-					</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{{path('profile_private_informations')}}">Edit Profil</a>
-						<a class="dropdown-item" href="{{path('app_logout')}}">Logout</a>
-					</div>
-				</li>
-				
-			{% else %}
-				<li class="nav-item">
-					<a class="btn btn-outline-success btnSigin" href="{{path('register')}}">Register</a>
-				</li>
+		<form class="form-inline my-2 my-lg-0">
+			<ul class="navbar-nav push-right mx-5">
+				{% if app.user %}
 
-        <li class="nav-item">
-					<a class="btn btn-outline-success" href="{{path('app_login')}}">Login</a>
-				</li>
-			{% endif %}
-		</ul>
-    </form>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							{{app.user.email}}
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="{{path('profile_private_informations')}}">Edit Profil</a>
+							<a class="dropdown-item" href="{{path('app_logout')}}">Logout</a>
+						</div>
+					</li>
+
+				{% else %}
+					<li class="nav-item">
+						<a class="btn btn-outline-success btnSigin" href="{{path('register')}}">Register</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="btn btn-outline-success" href="{{path('app_login')}}">Login</a>
+					</li>
+				{% endif %}
+			</ul>
+		</form>
 	</div>
 </nav>

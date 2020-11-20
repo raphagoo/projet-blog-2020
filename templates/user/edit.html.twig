@@ -20,18 +20,18 @@
 		<div class="example-wrapper">
 			<h1 class="text-center">Profile</h1>
 
-<<<<<<< HEAD
-			{{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
-=======
-            {{ include('user/_form.html.twig', {'button_label': 'Update'}) }} 
-            <a href="{{ path('profile_edit_password') }}" class="btn btn-info">Change password</a>
-            <div class="d-flex justify-content-center">
-                <div class="p-2">
-    {# <a href="{{ path('user_index') }}">back to list</a> #}
-                    <a href="{{ path('default') }}" class="btn btn-info">back to list</a> {#Pour le test pouvoir faire le css#}
-                </div>
->>>>>>> 2a5d391c2652512feb780e4396f3123f824ddf2b
 
+			{{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+			<a href="{{ path('profile_edit_password') }}" class="btn btn-info">Change password</a>
+			<div class="d-flex justify-content-center">
+				<div
+					class="p-2">
+					{# <a href="{{ path('user_index') }}">back to list</a> #}
+					<a href="{{ path('default') }}" class="btn btn-info">back to list</a>
+					{#Pour le test pouvoir faire le css#}
+				</div>
+
+			</div>
 		</div>
 	</div>
 {% endblock %}
