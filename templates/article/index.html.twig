@@ -3,12 +3,22 @@
 {% block title %}Hello ArticleController!{% endblock %}
 
 {% block body %}
-{{ article.author.email }} {{ stringDate }}
+    Made by : {{ article.author.email }}<br>
+    Date : {{ stringDate }}
     <h2>{{ article.title }}</h2>
     <h3>{{ article.subtitle }}</h3>
     <p>{{ article.content }}</p>
-    <span>Category : {{ article.category.name }}</span>
+    <span>Category : {{ article.category.name }}</span><br>
+    <span>Likes : {{ nbLikes }}</span>
     {% if app.user %}
+        <div>
+            {% if liked == false %}
+                <a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'true'}) }}"><button class="btn btn-outline btn-success">Like</button></a>
+            {% endif %}
+            {% if liked == true %}
+                <a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'false'}) }}"><button class="btn btn-outline btn-danger">Unlike</button></a>
+            {% endif %}
+        </div>
         <div>
 
             <span>Send a comment :</span><br>
@@ -29,7 +39,7 @@
         {% endif %}
         {% if app.user %}
             {% if comment.approved == null and app.user.email == comment.author.email %}
-                <span>{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}} - Your comment is awaiting verification</span>
+                <li>{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}} - Your comment is awaiting verification</li>
             {% endif %}
         {% endif %}
     {% endfor %}

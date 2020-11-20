@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\BL\ArticleManager;
 use App\BL\CommentManager;
+use App\BL\LikeManager;
 use App\BL\UserManager;
 use App\Entity\Article;
 use App\Entity\Comment;
+use App\Entity\Like;
 use App\Form\ArticleFormType;
 use App\Form\CommentFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,6 +40,10 @@ class ArticleController extends AbstractController
      * @var CommentManager
      */
     private $commentManager;
+    /**
+     * @var LikeManager
+     */
+    private $likeManager;
 
     public function __construct(EntityManagerInterface $em)
     {
@@ -45,6 +51,7 @@ class ArticleController extends AbstractController
         $this->articleManager = new ArticleManager($em);
         $this->userManager = new UserManager($em);
         $this->commentManager = new CommentManager($em);
+        $this->likeManager = new LikeManager($em);
         $this->em = $em;
     }
 
@@ -65,18 +72,52 @@ class ArticleController extends AbstractController
         $comment = new Comment();
         $comment->setArticle($article);
         $comment->setAuthor($security->getUser());
-
-
+        $liked = false;
+        $likes = $article->getLikes();
+        $nbLikes = count($likes);
+        foreach ($likes as $like){
+            if($like->getAuthor() === $this->getUser()){
+                $liked = true;
+                break;
+            }
+        }
 
         $form = $this->createForm(CommentFormType::class, $comment);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $comment->setCreationDate(new \DateTime('now'));
             $this->commentManager->saveData($comment);
-            return $this->redirectToRoute('viewArticle');
+            return $this->redirectToRoute('viewArticle', ['idArticle' => $idArticle]);
         }
 
-        return $this->render('article/index.html.twig', ['article' => $article, 'stringDate' => $stringDate, 'form' => $form->createView(), 'comment' => $comment, 'commentList' => $comments]);
+        return $this->render('article/index.html.twig', ['article' => $article, 'stringDate' => $stringDate, 'form' => $form->createView(), 'comment' => $comment, 'commentList' => $comments, 'liked' => $liked, 'nbLikes' => $nbLikes]);
+    }
+
+    /**
+     * @Route ("/article/{idArticle}/{liked}", name="likeArticle")
+     * @param $idArticle
+     * @param $liked
+     * @return RedirectResponse
+     */
+    public function likeArticle($idArticle, $liked)
+    {
+        $article = $this->articleManager->findArticleById($idArticle);
+        if($liked === 'true'){
+            $like = new Like();
+            $like->setArticle($article);
+            $like->setAuthor($this->getUser());
+            $like->setDateLike(new \DateTime('now'));
+            $this->likeManager->saveData($like);
+        }
+        else{
+            $likes = $article->getLikes();
+            foreach ($likes as $like){
+                if($like->getAuthor() === $this->getUser()){
+                    $this->likeManager->deleteLike($like);
+                }
+            }
+        }
+        return $this->redirectToRoute('viewArticle', ['idArticle' => $idArticle]);
     }
 
     /**
