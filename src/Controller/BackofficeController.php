@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\BL\ArticleManager;
+use App\BL\CommentManager;
 use App\BL\UserManager;
 use App\Entity\Article;
 use App\Form\ArticleFormType;
@@ -31,11 +32,17 @@ class BackofficeController extends AbstractController
      */
     private $userManager;
 
+    /**
+     * @var CommentManager
+     */
+    private $commentManager;
+
     public function __construct(EntityManagerInterface $em)
     {
 
         $this->articleManager = new ArticleManager($em);
         $this->userManager = new UserManager($em);
+        $this->commentManager = new CommentManager($em);
         $this->em = $em;
     }
 
@@ -68,12 +75,45 @@ class BackofficeController extends AbstractController
     }
 
     /**
-     * @Route("/editArticle/{idArticle}", name="backofficeEditArticle")
+     * @Route("/backoffice/editArticle/{idArticle}", name="backofficeEditArticle")
      * @param $idArticle
      * @return RedirectResponse|Response
      */
     public function editArticle($idArticle)
     {
         return $this->redirectToRoute('editArticle', ['idArticle' => $idArticle]);
+    }
+
+    /**
+     * @Route ("/backoffice/comments", name="backofficeComment")
+     * @return Response
+     */
+    public function commentList()
+    {
+        $comments = $this->commentManager->getComments();
+        return $this->render('backoffice/comments.html.twig', ['comments' => $comments]);
+    }
+
+    /**
+     * @Route ("/backoffice/comment/{idComment}", name="editComment")
+     * @param $idComment
+     * @return Response
+     */
+    public function editComment($idComment){
+        $comment = $this->commentManager->getCommentById($idComment);
+        return $this->render('backoffice/editComment.html.twig', ['comment' => $comment]);
+    }
+
+    /**
+     * @Route ("/backoffice/comment/{idComment}/{approved}", name="approveComment")
+     * @param $idComment
+     * @param $approved
+     * @return RedirectResponse
+     */
+    public function approveComment($idComment, $approved){
+        $comment = $this->commentManager->getCommentById($idComment);
+        $comment->setApproved($approved);
+        $this->commentManager->saveData($comment);
+        return $this->redirectToRoute('backofficeComment');
     }
 }

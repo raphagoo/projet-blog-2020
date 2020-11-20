@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Backoffice - Article{% endblock %}
+
+{% block body %}
+    {{ comment.content }}
+    <a href="{{ path('approveComment', {'idComment': comment.id, 'approved': true}) }}"><button class="btn btn-success">Approve</button></a>
+    <a href="{{ path('approveComment', {'idComment': comment.id, 'approved': false}) }}"><button class="btn btn-danger">Refuse</button></a>
+{% endblock %}

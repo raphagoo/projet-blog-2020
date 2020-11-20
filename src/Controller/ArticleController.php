@@ -66,6 +66,8 @@ class ArticleController extends AbstractController
         $comment->setArticle($article);
         $comment->setAuthor($security->getUser());
 
+
+
         $form = $this->createForm(CommentFormType::class, $comment);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){

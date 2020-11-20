@@ -25,4 +25,16 @@ class CommentManager
         $this->em->persist($comment);
         $this->em->flush();
     }
+
+    public function getComments(){
+        return $this->em->getRepository(Comment::class)->findAll();
+    }
+
+    /**
+     * @param $idComment
+     * @return Comment|null
+     */
+    public function getCommentById($idComment){
+        return $this->em->getRepository(Comment::class)->find($idComment);
+    }
 }
