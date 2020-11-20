@@ -11,6 +11,7 @@
             <h1>Edit User</h1>
 
             {{ include('user/_form.html.twig', {'button_label': 'Update'}) }} 
+            <a href="{{ path('profile_edit_password') }}" class="btn btn-info">Change password</a>
             <div class="d-flex justify-content-center">
                 <div class="p-2">
     {# <a href="{{ path('user_index') }}">back to list</a> #}
