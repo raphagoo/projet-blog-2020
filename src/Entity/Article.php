@@ -72,11 +72,17 @@ class Article
      */
     private $author;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Share::class, mappedBy="article", orphanRemoval=true)
+     */
+    private $shares;
+
     public function __construct()
     {
         $this->tag = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->shares = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -248,6 +254,36 @@ class Article
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Share[]
+     */
+    public function getShares(): Collection
+    {
+        return $this->shares;
+    }
+
+    public function addShare(Share $share): self
+    {
+        if (!$this->shares->contains($share)) {
+            $this->shares[] = $share;
+            $share->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShare(Share $share): self
+    {
+        if ($this->shares->removeElement($share)) {
+            // set the owning side to null (unless already changed)
+            if ($share->getArticle() === $this) {
+                $share->setArticle(null);
+            }
+        }
 
         return $this;
     }

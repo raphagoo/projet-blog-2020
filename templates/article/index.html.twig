@@ -11,6 +11,7 @@
     <p>{{ article.content }}</p>
     <span>Category : {{ article.category.name }}</span><br>
     <span>Likes : {{ nbLikes }}</span>
+    <span>Shares : {{ nbShares }}</span>
     {% if app.user %}
         <div>
             {% if liked == false %}
@@ -18,6 +19,12 @@
             {% endif %}
             {% if liked == true %}
                 <a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'false'}) }}"><button class="btn btn-outline btn-danger">Unlike</button></a>
+            {% endif %}
+            {% if shared == false %}
+                <a href="{{ path('shareArticle', {'idArticle': article.id}) }}"><button class="btn btn-outline btn-success">Share</button></a>
+            {% endif %}
+            {% if shared == true %}
+                <span>Shared</span>
             {% endif %}
         </div>
         <div>
