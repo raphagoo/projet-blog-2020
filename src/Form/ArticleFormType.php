@@ -43,6 +43,7 @@ class ArticleFormType extends AbstractType
                         'mimeTypes' => [
                             'image/jpeg',
                             'image/png',
+                            'image/webp'
                         ],
                         'mimeTypesMessage' => 'Please upload either a jpeg or png picture',
                     ])
