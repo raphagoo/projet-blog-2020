@@ -5,7 +5,7 @@
 {% block body %}
     <ul>
         {% for comment in comments %}
-            <li>{{ comment.author.email }} - {{ comment.article.title}}  - {% if comment.approved == true %} Approved {% endif %} {% if comment.approved == false %} Refused {% endif %} {% if comment.approved == null %} Waiting {% endif %}
+            <li>{{ comment.author.email }} - {{ comment.article.title}}  - {% if comment.approved is same as(true) %} Approved {% endif %} {% if comment.approved is same as (false) %} Refused {% endif %} {% if comment.approved is same as (null) %} Waiting {% endif %}
                 <a href="{{ path('editComment', {'idComment': comment.id}) }}"><button class="btn btn-info" type="button">View/Approve</button></a> </li>
         {% endfor %}
     </ul>
