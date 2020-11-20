@@ -1,63 +1,108 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ArticleController!{% endblock %}
+{% block title %}Hello ArticleController!
+{% endblock %}
 
 {% block body %}
-    Made by : {{ article.author.email }}<br>
-    Date : {{ stringDate }}
-    <h2>{{ article.title }}</h2>
-    <h3>{{ article.subtitle }}</h3>
-    <img style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}" alt="article picture">
-    <p>{{ article.content }}</p>
-    <span>Category : {{ article.category.name }}</span><br>
-    <span>Likes : {{ nbLikes }}</span>
-    <span>Shares : {{ nbShares }}</span>
-    {% if app.user %}
-        <div>
-            {% if liked == false %}
-                <a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'true'}) }}"><button class="btn btn-outline btn-success">Like</button></a>
-            {% endif %}
-            {% if liked == true %}
-                <a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'false'}) }}"><button class="btn btn-outline btn-danger">Unlike</button></a>
-            {% endif %}
-            {% if shared == false %}
-                <a href="{{ path('shareArticle', {'idArticle': article.id}) }}"><button class="btn btn-outline btn-success">Share</button></a>
-            {% endif %}
-            {% if shared == true %}
-                <span>Shared</span>
-            {% endif %}
-        </div>
-        <div>
+	{# <div class="example-wrapper"> #}
 
-            <span>Send a comment :</span><br>
-            <label for="lastName">lastName</label>
-            <input name="lastName" type="text" disabled value="{{ comment.author.lastName }}">
-            <label for="email">email</label>
-            <input name="email" type="text" disabled value="{{ comment.author.email }}">
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
-        </div>
-    {% endif %}
+	<div class="card w-75 p-3 mx-auto my-5">
+		<div class="card-header">
+			<h2 class="card-title">{{ article.title }}</h2>
+			<h4 class="card-subtitle mb-2 text-muted">{{ article.subtitle }}</h4>
+		</div>
+		<div class="card-body">
 
-    <ul>
-    {% for comment in commentList %}
-        {% if comment.approved == true %}
-            <li> {{ comment.author.email }} - {{ comment.content }}</li>
-        {% endif %}
-        {% if app.user %}
-            {% if comment.approved == null and app.user.email == comment.author.email %}
-                <li>{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}} - Your comment is awaiting verification</li>
-            {% endif %}
-        {% endif %}
-    {% endfor %}
-    </ul>
-    <div>
-        <h3>Articles récents</h3>
-        {% for recentArticle in recentArticles %}
-            <div>
-                {{ recentArticle.title }}
-            </div>
-        {% endfor %}
-    </div>
+			<img style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}" alt="article picture">
+			<p class="card-text contentCard">{{ article.content }}</p>
+			<span>Category :
+				{{ article.category.name }}</span><br>
+			<span>Likes :
+				{{ nbLikes }}</span>
+			<span>Shares :
+				{{ nbShares }}</span>
+			{% if app.user %}
+				<div>
+					{% if liked == false %}
+						<a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'true'}) }}">
+							<button class="btn btn-outline btn-success">Like</button>
+						</a>
+					{% endif %}
+					{% if liked == true %}
+						<a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'false'}) }}">
+							<button class="btn btn-outline btn-danger">Unlike</button>
+						</a>
+					{% endif %}
+					{% if shared == false %}
+						<a href="{{ path('shareArticle', {'idArticle': article.id}) }}">
+							<button class="btn btn-outline btn-success">Share</button>
+						</a>
+					{% endif %}
+					{% if shared == true %}
+						<span>Shared</span>
+					{% endif %}
+				</div>
+				<div>
+
+					<span>Send a comment :</span><br>
+					<label for="lastName">lastName</label>
+					<input name="lastName" type="text" disabled value="{{ comment.author.lastName }}">
+					<label for="email">email</label>
+					<input name="email" type="text" disabled value="{{ comment.author.email }}">
+					{{ form_start(form) }}
+					{{ form_widget(form) }}
+					{{ form_end(form) }}
+				</div>
+			{% endif %}
+
+			<ul>
+				{% for comment in commentList %}
+					{% if comment.approved == true %}
+						<li>
+							{{ comment.author.email }}
+							-
+							{{ comment.content }}</li>
+					{% endif %}
+					{% if app.user %}
+						{% if comment.approved == null and app.user.email == comment.author.email %}
+							<li>{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}}
+								- Your comment is awaiting verification</li>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="card-footer text-muted">
+			Made by :
+			{{ article.author.email }}<br>
+			Date :
+			{{ stringDate }}
+		</div>
+	</div>
+	{# FIN CARD #}
+
+	<div class="example-wrapper">
+		<h3>Articles récents</h3>
+		<div class="row">
+			{% for recentArticle in recentArticles %}
+				<div class="col-md-4">
+					<div class="card mb-2">
+						<img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg" alt="Card image cap">
+						<div class="card-body">
+							<h4 class="card-title">{{ recentArticle.title }}</h4>
+							<p class="card-subtitle">
+								{{ recentArticle.subtitle}}</p>
+							<a class="btn btn-primary" href="#">See article</a>
+						</div>
+					</div>
+				</div>
+				{# <div>
+				{{ recentArticle.title }}
+				</div> #}
+			{% endfor %}
+		</div>
+	</div>
+	{# </div> #}
+
+
 {% endblock %}
