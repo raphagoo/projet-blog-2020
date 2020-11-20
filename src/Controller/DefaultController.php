@@ -28,10 +28,12 @@ class DefaultController extends AbstractController
 
     /**
      * @Route("/", name="default")
+     * @param Request $request
+     * @return Response
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $articles = $this->articleManager->getArticles();
+        $articles = $this->articleManager->listArticles($request);
 
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController', 'articles' => $articles

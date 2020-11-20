@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Article;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @method Article|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +16,29 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ArticleRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var PaginatorInterface
+     */
+    private $knp;
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $knp)
     {
         parent::__construct($registry, Article::class);
+        $this->knp = $knp;
+    }
+
+    public function listArticles(Request $request)
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT a
+            FROM App\Entity\Article a'
+        );
+        return $this->knp->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            1 /*limit per page*/
+        );
+
     }
 
     /**

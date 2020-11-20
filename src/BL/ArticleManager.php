@@ -6,6 +6,7 @@ namespace App\BL;
 
 use App\Entity\Article;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ArticleManager
@@ -27,6 +28,11 @@ class ArticleManager
      */
     public function getArticles(){
         return $this->em->getRepository(Article::class)->findAll();
+    }
+
+    public function listArticles(Request $request)
+    {
+        return $this->em->getRepository(Article::class)->listArticles($request);
     }
 
     /**
