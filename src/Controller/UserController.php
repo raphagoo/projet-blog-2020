@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\Model\ChangePassword;
 use App\Form\UserCreateType;
 use App\Form\UserUpdateType;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,14 +48,27 @@ class UserController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function edit_profile(Request $request): Response
+    public function edit_profile(Request $request, UserRepository $userRepository): Response
     {
         $user = $this->getUser();
+        $userBeforeChange = $this->getUser();
         $form = $this->createForm(UserUpdateType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+
+
+            $userWithEmail = $userRepository->findOneByEmail($user->getEmail());
+
+            // Verification e-mail non existant
+            if (!$userWithEmail || $userWithEmail == $userBeforeChange) {
+                dump('toto');
+
+                $this->getDoctrine()->getManager()->flush();
+                $this->addFlash('success', 'Your profile has been successfully updated');
+            } else {
+                $this->addFlash('danger', 'An account already exists with this email');
+            }
         }
 
         return $this->render('user/edit.html.twig', [
@@ -71,7 +85,8 @@ class UserController extends AbstractController
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
      */
-    public function edit_password(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
+    public function edit_password(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
         $user = $this->getUser();
         $changePassword = new ChangePassword();
 
@@ -84,7 +99,7 @@ class UserController extends AbstractController
             $user->setPassword($newEncodedPassword);
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('notice', 'Your password has been successfully changed');
+            $this->addFlash('success', 'Your password has been successfully changed');
 
             return $this->redirectToRoute('profile_private_informations');
         }
@@ -94,5 +109,4 @@ class UserController extends AbstractController
             'user' => $user
         ));
     }
-
 }

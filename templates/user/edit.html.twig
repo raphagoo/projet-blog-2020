@@ -1,26 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}Edit User
+{% endblock %}
 
 {% block body %}
 
-    {# {{ include('user/_form.html.twig', {'button_label': 'Update'}) }} #}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success" role="alert">
+			{{ message }}
+		</div>
+	{% endfor %}
+	{% for message in app.flashes('danger') %}
+		<div class="alert alert-danger" role="alert">
+			{{ message }}
+		</div>
+	{% endfor %}
 	<div class="shadow-lg p-3 mb-5 bg-white rounded w-75 p-3 mx-auto mt-5">
 
-        <div class="example-wrapper">
-            <h1>Edit User</h1>
+		<div class="example-wrapper">
+			<h1 class="text-center">Profile</h1>
 
-            {{ include('user/_form.html.twig', {'button_label': 'Update'}) }} 
-            <div class="d-flex justify-content-center">
-                <div class="p-2">
-    {# <a href="{{ path('user_index') }}">back to list</a> #}
-                    <a href="{{ path('default') }}" class="btn btn-info">back to list</a> {#Pour le test pouvoir faire le css#}
-                </div>
+			{{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
 
-    {# <div class="p-2">
-    {{ include('user/_delete_form.html.twig') }}
-    </div> #}
-            </div>
-        </div>
-    </div>  
+		</div>
+	</div>
 {% endblock %}
