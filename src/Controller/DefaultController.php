@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\BL\ArticleManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,13 +12,28 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends AbstractController
 {
+
+    private $em;
+    /**
+     * @var ArticleManager
+     */
+    private $articleManager;
+
+
+    public function __construct(EntityManagerInterface $em)
+    {
+
+        $this->articleManager = new ArticleManager($em);
+    }
+
     /**
      * @Route("/", name="default")
      */
     public function index(): Response
     {
+        $articles = $this->articleManager->getArticles();
         return $this->render('default/index.html.twig', [
-            'controller_name' => 'DefaultController',
+            'controller_name' => 'DefaultController', 'articles' => $articles
         ]);
     }
 
