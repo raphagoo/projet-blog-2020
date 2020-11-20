@@ -31,11 +31,13 @@ class ArticleManager
 
     /**
      * @param Article $article
+     * @return int|null
      */
     public function GetInscriptionData(Article $article){
 
         $this->em->persist($article);
         $this->em->flush();
+        return $article->getId();
     }
 
     /**

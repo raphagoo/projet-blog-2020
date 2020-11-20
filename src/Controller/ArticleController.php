@@ -92,8 +92,8 @@ class ArticleController extends AbstractController
                 $article->setImage($newFilename);
             }
             $article->setAuthor($this->userManager->findUserById(1));
-            $this->articleManager->GetInscriptionData($article);
-            return $this->redirectToRoute('default');
+            $articleId = $this->articleManager->GetInscriptionData($article);
+            return $this->redirectToRoute('viewArticle', ['idArticle' => $articleId]);
         }
         return $this->render('article/addArticle.html.twig', [
             'form' => $form->createView()
@@ -149,8 +149,8 @@ class ArticleController extends AbstractController
                 }
             }
             $article->setAuthor($this->userManager->findUserById(1));
-            $this->articleManager->GetInscriptionData($article);
-            return $this->redirectToRoute('default');
+            $articleId = $this->articleManager->GetInscriptionData($article);
+            return $this->redirectToRoute('viewArticle', ['idArticle' => $articleId]);
         }
         return $this->render('article/editArticle.html.twig', [
             'form' => $form->createView(), 'image' => $oldFilename, 'article' => $article
