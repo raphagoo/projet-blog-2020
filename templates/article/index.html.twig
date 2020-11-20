@@ -92,13 +92,15 @@
 							<h4 class="card-title">{{ recentArticle.title }}</h4>
 							<p class="card-subtitle">
 								{{ recentArticle.subtitle}}</p>
-							<a class="btn btn-primary" href="#">See article</a>
+
+							<a class="btn btn-primary" href="{{ path('viewArticle', {'idArticle': recentArticle.id}) }}">See article</a>
+
 						</div>
 					</div>
 				</div>
 				{# <div>
-				{{ recentArticle.title }}
-				</div> #}
+								{{ recentArticle.title }}
+								</div> #}
 			{% endfor %}
 		</div>
 	</div>
