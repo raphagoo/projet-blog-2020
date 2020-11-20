@@ -30,6 +30,12 @@
   <div class="p-2"><h5 class="card-title">{{ article.author.firstName }} </h5></div>
   <div class="p-2"><p class="card-title">{{ article.publicationDate|date("d/m/Y H:i:s", "Europe/Paris") }} </p></div>
   <div class="mr-auto p-2">{{ article.category.name }}</div>
+  <div class="p-2">
+    Likes : {{ article.likes|length }}
+  </div>
+  <div class="p-2">
+    Shares : {{ article.shares|length }}
+  </div>
 </div> 
   </div>
   

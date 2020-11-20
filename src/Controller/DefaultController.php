@@ -32,6 +32,7 @@ class DefaultController extends AbstractController
     public function index(): Response
     {
         $articles = $this->articleManager->getArticles();
+
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController', 'articles' => $articles
         ]);
@@ -49,6 +50,8 @@ class DefaultController extends AbstractController
 
     /**
      * @Route("/contact", name="contact")
+     * @param Request $request
+     * @return Response
      */
     public function contact(Request $request): Response
     {

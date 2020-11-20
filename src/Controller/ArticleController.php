@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\BL\ArticleManager;
 use App\BL\CommentManager;
 use App\BL\LikeManager;
+use App\BL\ShareManager;
 use App\BL\UserManager;
 use App\Entity\Article;
 use App\Entity\Comment;
 use App\Entity\Like;
+use App\Entity\Share;
 use App\Form\ArticleFormType;
 use App\Form\CommentFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,6 +46,10 @@ class ArticleController extends AbstractController
      * @var LikeManager
      */
     private $likeManager;
+    /**
+     * @var ShareManager
+     */
+    private $shareManager;
 
     public function __construct(EntityManagerInterface $em)
     {
@@ -52,6 +58,7 @@ class ArticleController extends AbstractController
         $this->userManager = new UserManager($em);
         $this->commentManager = new CommentManager($em);
         $this->likeManager = new LikeManager($em);
+        $this->shareManager = new ShareManager($em);
         $this->em = $em;
     }
 
@@ -195,6 +202,15 @@ class ArticleController extends AbstractController
             }
         }
 
+        $shared = false;
+        $shares = $article->getShares();
+        $nbShares = count($shares);
+        foreach ($shares as $share){
+            if($share->getAuthor() === $this->getUser()){
+                $shared = true;
+                break;
+            }
+        }
         $form = $this->createForm(CommentFormType::class, $comment);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
@@ -204,7 +220,23 @@ class ArticleController extends AbstractController
         }
 
         return $this->render('article/index.html.twig', ['article' => $article, 'stringDate' => $stringDate, 'recentArticles' => $recentArticles,
-        'form' => $form->createView(), 'comment' => $comment, 'commentList' => $comments, 'liked' => $liked, 'nbLikes' => $nbLikes]);
+        'form' => $form->createView(), 'comment' => $comment, 'commentList' => $comments, 'liked' => $liked, 'nbLikes' => $nbLikes, 'shared' => $shared, 'nbShares' => $nbShares]);
+    }
+
+    /**
+     * @Route ("/article/{idArticle}/share", name="shareArticle")
+     * @param $idArticle
+     * @return RedirectResponse
+     */
+    public function shareArticle($idArticle)
+    {
+        $article = $this->articleManager->findArticleById($idArticle);
+        $share = new Share();
+        $share->setArticle($article);
+        $share->setAuthor($this->getUser());
+        $share->setDateShare(new \DateTime('now'));
+        $this->shareManager->saveData($share);
+        return $this->redirectToRoute('viewArticle', ['idArticle' => $idArticle]);
     }
 
     /**
@@ -233,5 +265,6 @@ class ArticleController extends AbstractController
         }
         return $this->redirectToRoute('viewArticle', ['idArticle' => $idArticle]);
     }
+
 
 }
