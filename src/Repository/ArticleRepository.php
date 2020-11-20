@@ -26,13 +26,16 @@ class ArticleRepository extends ServiceEntityRepository
         $this->knp = $knp;
     }
 
-    public function listArticles(Request $request)
+    public function listArticles(Request $request, $searchTerm = null)
     {
         $entityManager = $this->getEntityManager();
         $query = $entityManager->createQuery(
             'SELECT a
-            FROM App\Entity\Article a'
-        );
+            FROM App\Entity\Article a
+            WHERE a.title LIKE :searchTerm'
+        )
+            ->setParameter('searchTerm', '%'.$searchTerm.'%');
+
         return $this->knp->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/

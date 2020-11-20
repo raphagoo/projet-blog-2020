@@ -13,13 +13,18 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Wellcomme to our blog</h1>
+    <h1>Welcome to our blog</h1>
 <div class="d-flex">
-  <div class="p-2"><button> <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-</svg> 
-</button></div>
-  <div class="p-2"><input class="form-control mr-sm-2 search" type="search" placeholder="Search" aria-label="Search"></div>
+  <div class="p-2">
+    <button>
+    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+    </svg>
+    </button>
+  </div>
+  {{ form_start(form) }}
+  {{ form_widget(form) }}
+  {{ form_end(form) }}
 </div>
 
 {% for article in articles %}

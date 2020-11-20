@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\BL\ArticleManager;
+use App\Form\SearchFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,9 +35,14 @@ class DefaultController extends AbstractController
     public function index(Request $request): Response
     {
         $articles = $this->articleManager->listArticles($request);
-
+        $form = $this->createForm(SearchFormType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $searchTerm = $form->get('search')->getData();
+            $articles = $this->articleManager->listArticles($request, $searchTerm);
+        }
         return $this->render('default/index.html.twig', [
-            'controller_name' => 'DefaultController', 'articles' => $articles
+            'controller_name' => 'DefaultController', 'articles' => $articles, 'form' => $form->createView()
         ]);
     }
 
