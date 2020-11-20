@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserType;
-use App\Repository\UserRepository;
+use App\Form\Model\ChangePassword;
+use App\Form\UserCreateType;
+use App\Form\UserUpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 class UserController extends AbstractController
@@ -18,10 +20,10 @@ class UserController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function new(Request $request): Response
+    public function register(Request $request): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserCreateType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -41,27 +43,18 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="user_show", methods={"GET"})
+     * @Route("/profile/informations", name="profile_private_informations")
+     * @param Request $request
+     * @return Response
      */
-    public function show(User $user): Response
+    public function edit_profile(Request $request): Response
     {
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, User $user): Response
-    {
-        $form = $this->createForm(UserType::class, $user);
+        $user = $this->getUser();
+        $form = $this->createForm(UserUpdateType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('user_index');
         }
 
         return $this->render('user/edit.html.twig', [
@@ -70,17 +63,36 @@ class UserController extends AbstractController
         ]);
     }
 
+
+    // See https://openclassrooms.com/forum/sujet/modifier-mon-mot-de-passe
     /**
-     * @Route("/{id}", name="user_delete", methods={"DELETE"})
+     * @Route("/profile/editPassword", name="profile_edit_password")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return Response
      */
-    public function delete(Request $request, User $user): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($user);
-            $entityManager->flush();
+    public function edit_password(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
+        $user = $this->getUser();
+        $changePassword = new ChangePassword();
+
+        $form = $this->createForm('App\Form\UserPasswordType', $changePassword);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newPassword = $form->get('Password')['first']->getData();
+
+            $newEncodedPassword = $passwordEncoder->encodePassword($user, $newPassword);
+            $user->setPassword($newEncodedPassword);
+
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('notice', 'Your password has been successfully changed');
+
+            return $this->redirectToRoute('profile_private_informations');
         }
 
-        return $this->redirectToRoute('user_index');
+        return $this->render('user/edit_password.html.twig', array(
+            'form' => $form->createView(),
+            'user' => $user
+        ));
     }
+
 }
