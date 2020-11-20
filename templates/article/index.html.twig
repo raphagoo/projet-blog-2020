@@ -45,4 +45,12 @@
         {% endif %}
     {% endfor %}
     </ul>
+    <div>
+        <h3>Articles récents</h3>
+        {% for recentArticle in recentArticles %}
+            <div>
+                {{ recentArticle.title }}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

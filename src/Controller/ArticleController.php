@@ -176,6 +176,7 @@ class ArticleController extends AbstractController
      */
     public function viewArticle($idArticle, Request $request, Security $security){
         $article = $this->articleManager->findArticleById($idArticle);
+        $recentArticles = $this->articleManager->getRecentArticles($idArticle);
 
         $date = $article->getPublicationDate();
         $stringDate = $date->format('Y-m-d H:i:s');
@@ -202,7 +203,8 @@ class ArticleController extends AbstractController
             return $this->redirectToRoute('viewArticle', ['idArticle' => $idArticle]);
         }
 
-        return $this->render('article/index.html.twig', ['article' => $article, 'stringDate' => $stringDate, 'form' => $form->createView(), 'comment' => $comment, 'commentList' => $comments, 'liked' => $liked, 'nbLikes' => $nbLikes]);
+        return $this->render('article/index.html.twig', ['article' => $article, 'stringDate' => $stringDate, 'recentArticles' => $recentArticles,
+        'form' => $form->createView(), 'comment' => $comment, 'commentList' => $comments, 'liked' => $liked, 'nbLikes' => $nbLikes]);
     }
 
     /**
