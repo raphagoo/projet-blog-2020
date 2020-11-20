@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\BL\CategoryManager;
 use App\Form\CategoryFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 ;
 
@@ -19,7 +19,7 @@ class CategoryController extends AbstractController
     public function __construct(EntityManagerInterface $em)
     {
 
-        $this->optionManager = new CategoryManager($em);
+        $this->categoryManager = new CategoryManager($em);
         $this->em = $em;
     }
 
@@ -46,48 +46,48 @@ class CategoryController extends AbstractController
     {
 
         $category = new Category();
-        $form = $this->createForm(OptionFormType::class, $option);
+        $form = $this->createForm(CategoryFormType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->optionManager->GetInscriptionData($option);
-            return $this->redirectToRoute('GetListOption');
+            $this->categoryManager->GetInscriptionData($category);
+            return $this->redirectToRoute('category');
         }
-        return $this->render('backoffice/option/optionAdd.html.twig', [
+        return $this->render('category/categoryAdd.html.twig', [
             'form' => $form->createView()
         ]);
     }
 
     /**
-     * @Route("/backoffice/option/edit/{idOption}", name="editOption")
-     * @param $idOption
+     * @Route("category/edit/{idCategory}", name="editCategory")
+     * @param $idCategory
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function getModifyAgent($idOption, Request $request)
+    public function getModifyCategory($idCategory, Request $request)
     {
-        $option = $this->optionManager->getOptionById($idOption);
-        $form = $this->createForm(OptionFormType::class, $option);
+        $category = $this->categoryManager->getCategoryById($idCategory);
+        $form = $this->createForm(CategoryFormType::class, $category);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $this->optionManager->GetInscriptionData($option);
-            return $this->redirectToRoute('GetListOption');
+            $this->categoryManager->GetInscriptionData($category);
+            return $this->redirectToRoute('category');
         }
-        return $this->render('backoffice/option/optionEdit.html.twig', [
+        return $this->render('category/categoryEdit.html.twig', [
             'form' => $form->createView()
         ]);
     }
 
     /**
-     * @Route("/backoffice/option/delete/{idOption}",name="deleteOption")
-     * @param $idOption
+     * @Route("category/delete/{idCategory}",name="deleteCategory")
+     * @param $idCategory
      * @return RedirectResponse|Response
      */
-    public function deleteRoom($idOption)
+    public function deleteCategory($idCategory)
     {
-        $option = $this->optionManager->getOptionById($idOption);
-        $this->optionManager->deleteOption($option);
-        return $this->redirectToRoute('GetListOption');
+        $category = $this->categoryManager->getCategoryById($idCategory);
+        $this->categoryManager->deleteCategory($category);
+        return $this->redirectToRoute('category');
     }
 }

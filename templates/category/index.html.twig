@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CategoryController!{% endblock %}
-
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
@@ -9,12 +7,32 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/blanc/OneDrive/Bureau/YNOV/M1/FULL STACK/projet-blog-2020/src/Controller/CategoryController.php'|file_link(0) }}">src/Controller/CategoryController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/blanc/OneDrive/Bureau/YNOV/M1/FULL STACK/projet-blog-2020/templates/category/index.html.twig'|file_link(0) }}">templates/category/index.html.twig</a></code></li>
-    </ul>
+   
+      <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    {% for category in listCategory %}
+<tr>
+  <td>
+      {{ category.id }}
+  </td>
+      <td>{{ category.name }}</td>
+   
+    <td><a href="{{ path('editCategory', {'idCategory': category.id}) }}"><button class="btn btn-info" type="button">Edit</button></a> <a href="{{ path('deleteCategory', {'idCategory': category.id}) }}"><button class="btn btn-danger" type="button">Delete</button></a></td>
+    
+  
+</tr>
+    {% endfor %}
+    </tbody>
+</table>
+    
+     <a href="{{ path('addCategory') }}"><button class="btn btn-primary" type="button">Add Category</button></a> 
 </div>
 {% endblock %}

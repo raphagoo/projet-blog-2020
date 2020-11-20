@@ -17,7 +17,6 @@ class CategoryFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            
         ;
     }
 

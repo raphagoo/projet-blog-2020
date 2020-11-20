@@ -55,5 +55,12 @@ class CategoryManager
         $this->em->flush();
     }
 
-
+   /**
+     * @param $category
+     */
+    public function deleteCategory($category)
+    {
+        $this->em->remove($category);
+        $this->em->flush();
+    }
 }
