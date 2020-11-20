@@ -3,9 +3,11 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+	<h1 class="text-center mt-5">Register</h1>
 
-    {{ include('user/_form.html.twig', {'button_label': 'Register'}) }}
+	<div class="example-wrapper">
+    	{{ include('user/_form.html.twig', {'button_label': 'Register'}) }}
 
-    <a href="{{path('app_login')}}">Log in</a>
+    	<a href="{{path('app_login')}}">Log in</a>
+	</div>
 {% endblock %}
