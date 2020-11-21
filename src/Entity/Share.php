@@ -24,7 +24,7 @@ class Share
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="shares")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $author;
 

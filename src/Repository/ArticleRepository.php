@@ -39,7 +39,7 @@ class ArticleRepository extends ServiceEntityRepository
         return $this->knp->paginate(
             $query, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            1 /*limit per page*/
+            5 /*limit per page*/
         );
 
     }

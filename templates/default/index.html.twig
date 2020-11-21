@@ -58,7 +58,7 @@
   
     <p class="card-text">{{ article.content }}</p>
 
-    <img style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}" alt="article picture">
+    <img id="article_{{ article.id }}" onerror="standby('article_{{ article.id }}')" style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}" alt="article picture">
     <div class="margin-top">
 
 {% if app.user%}

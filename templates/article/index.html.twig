@@ -13,7 +13,7 @@
 		</div>
 		<div class="card-body">
 
-			<img style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}" alt="article picture">
+			<img id="article_{{ article.id }}" onerror="standby('article_{{ article.id }}')" style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}">
 			<p class="card-text contentCard">{{ article.content }}</p>
 			<span>Category :</span>
 			<span class="btn btn-outline-warning">{{ article.category.name }}</span><br>
@@ -46,9 +46,7 @@
 
 					<span>Send a comment :</span><br><br>
 					<div class="text-muted">
-						<label for="lastName">lastName</label>
 						<input name="lastName" type="text" disabled value="{{ comment.author.lastName }}">
-						<label for="email">email</label>
 						<input name="email" type="text" disabled value="{{ comment.author.email }}">
 					</div>
 					{{ form_start(form) }}
@@ -76,7 +74,7 @@
 		</div>
 		<div class="card-footer text-muted">
 			Made by :
-			{{ article.author.email }}<br>
+			{{ article.author.firstName }} {{ article.author.lastName }}<br>
 			Date :
 			{{ stringDate }}
 		</div>
@@ -89,7 +87,7 @@
 			{% for recentArticle in recentArticles %}
 				<div class="col-md-4">
 					<div class="card mb-2">
-						<img
+						<img id="article_{{ recentArticle.id }}" onerror="standby('article_{{ recentArticle.id }}')"
 						class="card-img-top" src="{{ asset('uploads/images/' ~ recentArticle.image) }}" alt=" card image cap">
 						{# <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg" alt="Card image cap"> #}
 						<div class="card-body">
