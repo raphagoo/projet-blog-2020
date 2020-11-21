@@ -15,14 +15,14 @@
 
 			<img style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}" alt="article picture">
 			<p class="card-text contentCard">{{ article.content }}</p>
-			<span>Category :
-				{{ article.category.name }}</span><br>
-			<span>Likes :
-				{{ nbLikes }}</span>
-			<span>Shares :
-				{{ nbShares }}</span>
+			<span>Category :</span>
+			<span class="btn btn-outline-warning">{{ article.category.name }}</span><br>
+			<span>Likes :</span>
+			<span class="badge badge-secondary">{{ nbLikes }}</span>
+			<span>Shares :</span>
+			<span class="badge badge-primary">{{ nbShares }}</span>
 			{% if app.user %}
-				<div>
+				<div class="mt-4 border-bottom pb-4	">
 					{% if liked == false %}
 						<a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'true'}) }}">
 							<button class="btn btn-outline btn-success">Like</button>
@@ -35,20 +35,22 @@
 					{% endif %}
 					{% if shared == false %}
 						<a href="{{ path('shareArticle', {'idArticle': article.id}) }}">
-							<button class="btn btn-outline btn-success">Share</button>
+							<button class="btn btn-outline btn-primary">Share</button>
 						</a>
 					{% endif %}
 					{% if shared == true %}
-						<span>Shared</span>
+						<span class="badge badge-light">Shared</span>
 					{% endif %}
 				</div>
-				<div>
+				<div class="mt-5 pb-2">
 
-					<span>Send a comment :</span><br>
-					<label for="lastName">lastName</label>
-					<input name="lastName" type="text" disabled value="{{ comment.author.lastName }}">
-					<label for="email">email</label>
-					<input name="email" type="text" disabled value="{{ comment.author.email }}">
+					<span>Send a comment :</span><br><br>
+					<div class="text-muted">
+						<label for="lastName">lastName</label>
+						<input name="lastName" type="text" disabled value="{{ comment.author.lastName }}">
+						<label for="email">email</label>
+						<input name="email" type="text" disabled value="{{ comment.author.email }}">
+					</div>
 					{{ form_start(form) }}
 					{{ form_widget(form) }}
 					{{ form_end(form) }}
@@ -87,7 +89,9 @@
 			{% for recentArticle in recentArticles %}
 				<div class="col-md-4">
 					<div class="card mb-2">
-						<img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg" alt="Card image cap">
+						<img
+						class="card-img-top" src="{{ asset('uploads/images/' ~ recentArticle.image) }}" alt=" card image cap">
+						{# <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg" alt="Card image cap"> #}
 						<div class="card-body">
 							<h4 class="card-title">{{ recentArticle.title }}</h4>
 							<p class="card-subtitle">
@@ -99,8 +103,8 @@
 					</div>
 				</div>
 				{# <div>
-								{{ recentArticle.title }}
-								</div> #}
+																																																																																																																																																																					{{ recentArticle.title }}
+																																																																																																																																																																					</div> #}
 			{% endfor %}
 		</div>
 	</div>
