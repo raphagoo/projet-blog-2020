@@ -15,33 +15,43 @@
 <div class="example-wrapper">
     <h1>Welcome to our blog</h1>
 <div class="d-flex">
-  <div class="p-2">
-    <button>
-    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-    </svg>
-    </button>
-  </div>
   {{ form_start(form) }}
   {{ form_widget(form) }}
   {{ form_end(form) }}
-</div>
+  </div>
+  <span>Order by :</span>
+  <div class="sortItem">
+    <span{% if articles.isSorted('a.Title') %} class="sorted"{% endif %}>
+      {{ knp_pagination_sortable(articles, 'Title', 'a.title') }}
+    </span>
+  </div>
+  <div class="sortItem">
+    <span{% if articles.isSorted(['a.publicationDate']) %} class="sorted"{% endif %}>
+      {{ knp_pagination_sortable(articles, 'Release', ['a.publicationDate']) }}
+    </span>
+  </div>
 
 {% for article in articles %}
 <div class="card" style="margin-top: 2%">
   <div class="card-header">
-   {{ article.title }} 
-   <div class="d-flex">
-  <div class="p-2"><h5 class="card-title">{{ article.author.firstName }} </h5></div>
-  <div class="p-2"><p class="card-title">{{ article.publicationDate|date("d/m/Y H:i:s", "Europe/Paris") }} </p></div>
-  <div class="mr-auto p-2">{{ article.category.name }}</div>
-  <div class="p-2">
-    Likes : {{ article.likes|length }}
-  </div>
-  <div class="p-2">
-    Shares : {{ article.shares|length }}
-  </div>
-</div> 
+   {{ article.title }}
+   <div class="row">
+     <div class="col-sm-12 col-xs-12">
+       {{ article.author.firstName }} {{ article.author.lastName }}
+     </div>
+     <div class="col-sm-12 col-xs-12">
+       {{ article.publicationDate|date("d/m/Y H:i:s", "Europe/Paris") }}
+     </div>
+     <div class="col-sm-6 col-xs-6">
+       {{ article.category.name }}
+     </div>
+     <div class="offset-sm-2 col-sm-2 col-xs-2">
+       Likes : {{ article.likes|length }}
+     </div>
+     <div class="col-sm-2 col-xs-2">
+       Shares : {{ article.shares|length }}
+     </div>
+   </div>
   </div>
   
   <div class="card-body">
@@ -50,7 +60,6 @@
 
     <img style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}" alt="article picture">
     <div class="margin-top">
-    <i>
 
 {% if app.user%}
 <a href="{{ path('viewArticle', {'idArticle': article.id}) }}" class="btn btn-primary">View article</a>
@@ -58,24 +67,6 @@
 {% if app.user and is_granted('ROLE_ADMIN')%}
     <a href="{{ path('editArticle', {'idArticle': article.id}) }}" class="btn btn-primary">Edit article</a>
     
-{% endif %}
-<a href="#" style="color: black;"> <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-share-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/>
-</svg></a> </i>
-
-
-
-
-{% if app.user%}
-
-<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-</svg>
-
-<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-heart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-</svg>
-
 {% endif %}
   </div>
 </div>
