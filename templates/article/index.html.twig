@@ -76,7 +76,7 @@
 											<td>{{ comment.author.email }}</td>
 										{% endif %}
 										{% if app.user %}
-											{% if comment.approved == null and app.user.email == comment.author.email %}
+											{% if comment.approved is same as (null) and app.user.email == comment.author.email %}
 												<td class="bg-warning  text-muted">{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}}</td>
 												<td class="text-warning">
 													Your comment is awaiting verification</td>
@@ -104,7 +104,7 @@
 		<h3>Articles récents</h3>
 		<div class="row">
 			{% for recentArticle in recentArticles %}
-				<div class="col-md-3 col-12">
+				<div class="col-md-3 col-sm-6 col-xs-12">
 					<div class="card mb-2">
 						<img id="article_{{ recentArticle.id }}" onerror="standby('article_{{ recentArticle.id }}')" class="card-img-top" src="{{ asset('uploads/images/' ~ recentArticle.image) }}" alt=" card image cap">
 						<div class="card-body">

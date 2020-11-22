@@ -5,5 +5,5 @@
 {% block body %}
     {{ comment.content }}
     <a href="{{ path('approveComment', {'idComment': comment.id, 'approved': 'true'}) }}"><button class="btn btn-success">Approve</button></a>
-    <a href="{{ path('approveComment', {'idComment': comment.id, 'approved': 'false'}) }}"><button class="btn btn-danger">Refuse</button></a>
+    <a href="{{ path('approveComment', {'idComment': comment.id, 'approved': 0}) }}"><button class="btn btn-danger">Refuse</button></a>
 {% endblock %}
