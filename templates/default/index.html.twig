@@ -61,9 +61,9 @@
     <img id="article_{{ article.id }}" onerror="standby('article_{{ article.id }}')" style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}" alt="article picture">
     <div class="margin-top">
 
-{% if app.user%}
+
 <a href="{{ path('viewArticle', {'idArticle': article.id}) }}" class="btn btn-primary">View article</a>
-{% endif %}
+
 {% if app.user and is_granted('ROLE_ADMIN')%}
     <a href="{{ path('editArticle', {'idArticle': article.id}) }}" class="btn btn-primary">Edit article</a>
     
