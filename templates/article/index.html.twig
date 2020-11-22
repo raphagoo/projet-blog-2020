@@ -6,7 +6,10 @@
 {% block body %}
 	{# <div class="example-wrapper"> #}
 
-	<div class="card w-75 p-3 mx-auto my-5">
+	<div
+		class="card w-75 p-3 mx-auto my-5">
+		{# <div class="row"> #}
+
 		<div class="card-header">
 			<h2 class="card-title">{{ article.title }}</h2>
 			<h4 class="card-subtitle mb-2 text-muted">{{ article.subtitle }}</h4>
@@ -54,30 +57,46 @@
 					{{ form_end(form) }}
 				</div>
 			{% endif %}
+			<div>
+				<h1>All Comments</h1>
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Comments</th>
+							<th scope="col">Author</th>
+						</tr>
+					</thead>
 
-			<ul>
-				{% for comment in commentList %}
-					{% if comment.approved == true %}
-						<li>
-							{{ comment.author.email }}
-							-
-							{{ comment.content }}</li>
-					{% endif %}
-					{% if app.user %}
-						{% if comment.approved == null and app.user.email == comment.author.email %}
-							<li>{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}}
-								- Your comment is awaiting verification</li>
-						{% endif %}
-					{% endif %}
-				{% endfor %}
-			</ul>
+					<tbody>
+						{% for comment in commentList %}
+							<tr>
+								{% if comment.approved == true %}
+									<td>
+										{{ comment.content }}
+									</td>
+									<td>{{ comment.author.email }}</td>
+								{% endif %}
+								{% if app.user %}
+									{% if comment.approved == null and app.user.email == comment.author.email %}
+										<td class="bg-warning  text-muted">{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}}</td>
+										<td class="text-warning">
+											Your comment is awaiting verification</td>
+									{% endif %}
+								{% endif %}
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<div class="card-footer text-muted">
 			Made by :
-			{{ article.author.firstName }} {{ article.author.lastName }}<br>
+			{{ article.author.firstName }}
+			{{ article.author.lastName }}<br>
 			Date :
 			{{ stringDate }}
 		</div>
+		{# </div> #}
 	</div>
 	{# FIN CARD #}
 
@@ -87,8 +106,8 @@
 			{% for recentArticle in recentArticles %}
 				<div class="col-md-4">
 					<div class="card mb-2">
-						<img id="article_{{ recentArticle.id }}" onerror="standby('article_{{ recentArticle.id }}')"
-						class="card-img-top" src="{{ asset('uploads/images/' ~ recentArticle.image) }}" alt=" card image cap">
+						<img
+						id="article_{{ recentArticle.id }}" onerror="standby('article_{{ recentArticle.id }}')" class="card-img-top" src="{{ asset('uploads/images/' ~ recentArticle.image) }}" alt=" card image cap">
 						{# <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg" alt="Card image cap"> #}
 						<div class="card-body">
 							<h4 class="card-title">{{ recentArticle.title }}</h4>
@@ -101,8 +120,8 @@
 					</div>
 				</div>
 				{# <div>
-																																																																																																																																																																					{{ recentArticle.title }}
-																																																																																																																																																																					</div> #}
+																																																																																																																																																																																																																																										{{ recentArticle.title }}
+																																																																																																																																																																																																																																										</div> #}
 			{% endfor %}
 		</div>
 	</div>
