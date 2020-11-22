@@ -1,29 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-	<div class="shadow-lg p-3 mb-5 bg-white rounded w-75 p-3 mx-auto mt-5">
-		<h1 class="text-center">Edition of the article :
-			{{ article.title }}</h1>
-		<div class="example-wrapper">
-			{{ form_start(form) }}
-			{{ form_row(form.title) }}
-			{{ form_row(form.subtitle) }}
-			{% if image %}
-				<img style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ image) }}" alt="article picture">
-			{% endif %}
-			{{ form_row(form.image) }}
-			{{ form_row(form.content) }}
-			{{ form_row(form.publicationDate) }}
-			{{ form_row(form.category) }}
-			{{ form_row(form.tag) }}
-			{{ form_widget(form) }}
-			{{ form_end(form) }}
-			{% if is_granted('ROLE_ADMIN') %}
-				<a href="{{ path('deleteArticle', {'idArticle': article.id}) }}">
-					<button class="btn btn-danger" type="button">Remove</button>
-				</a>
-			{% endif %}
+	<div class="container">
+		<div class="shadow-lg p-3 mb-5 bg-white rounded mx-auto mt-5">
+			<h1 class="text-center">Edition of the article :
+				{{ article.title }}</h1>
+			<div class="example-wrapper">
+				{{ form_start(form) }}
+				{{ form_row(form.title) }}
+				{{ form_row(form.subtitle) }}
+				{% if image %}
+					<img style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ image) }}" alt="article picture">
+				{% endif %}
+				{{ form_row(form.image) }}
+				{{ form_row(form.content) }}
+				{{ form_row(form.publicationDate) }}
+				{{ form_row(form.category) }}
+				{{ form_row(form.tag) }}
+				{{ form_widget(form) }}
+				{{ form_end(form) }}
+				{% if is_granted('ROLE_ADMIN') %}
+					<a href="{{ path('deleteArticle', {'idArticle': article.id}) }}">
+						<button class="btn btn-danger" type="button">Remove</button>
+					</a>
+				{% endif %}
+			</div>
 		</div>
 	</div>
-</div>{% endblock %}
+{% endblock %}

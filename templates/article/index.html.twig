@@ -4,111 +4,109 @@
 {% endblock %}
 
 {% block body %}
-	{# <div class="example-wrapper"> #}
+	<div class="container">
 
-	<div
-		class="card w-75 p-3 mx-auto my-5">
-		{# <div class="row"> #}
+		<div class="card p-3 mx-auto my-5">
+			<div class="row">
 
-		<div class="card-header">
-			<h2 class="card-title">{{ article.title }}</h2>
-			<h4 class="card-subtitle mb-2 text-muted">{{ article.subtitle }}</h4>
-		</div>
-		<div class="card-body">
-
-			<img id="article_{{ article.id }}" onerror="standby('article_{{ article.id }}')" style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}">
-			<p class="card-text contentCard">{{ article.content }}</p>
-			<span>Category :</span>
-			<span class="btn btn-outline-warning">{{ article.category.name }}</span><br>
-			<span>Likes :</span>
-			<span class="badge badge-secondary">{{ nbLikes }}</span>
-			<span>Shares :</span>
-			<span class="badge badge-primary">{{ nbShares }}</span>
-			{% if app.user %}
-				<div class="mt-4 border-bottom pb-4	">
-					{% if liked == false %}
-						<a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'true'}) }}">
-							<button class="btn btn-outline btn-success">Like</button>
-						</a>
-					{% endif %}
-					{% if liked == true %}
-						<a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'false'}) }}">
-							<button class="btn btn-outline btn-danger">Unlike</button>
-						</a>
-					{% endif %}
-					{% if shared == false %}
-						<a href="{{ path('shareArticle', {'idArticle': article.id}) }}">
-							<button class="btn btn-outline btn-primary">Share</button>
-						</a>
-					{% endif %}
-					{% if shared == true %}
-						<span class="badge badge-light">Shared</span>
-					{% endif %}
+				<div class="card-header  col-md-12 et col-xs-6">
+					<h2 class="card-title">{{ article.title }}</h2>
+					<h4 class="card-subtitle mb-2 text-muted">{{ article.subtitle }}</h4>
 				</div>
-				<div class="mt-5 pb-2">
+				<div class="card-body  col-md-12 et col-xs-6">
 
-					<span>Send a comment :</span><br><br>
-					<div class="text-muted">
-						<input name="lastName" type="text" disabled value="{{ comment.author.lastName }}">
-						<input name="email" type="text" disabled value="{{ comment.author.email }}">
+					<img id="article_{{ article.id }}" onerror="standby('article_{{ article.id }}')" style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}">
+					<p class="card-text contentCard">{{ article.content }}</p>
+					<span>Category :</span>
+					<span class="btn btn-outline-warning">{{ article.category.name }}</span><br>
+					<span>Likes :</span>
+					<span class="badge badge-secondary">{{ nbLikes }}</span>
+					<span>Shares :</span>
+					<span class="badge badge-primary">{{ nbShares }}</span>
+					{% if app.user %}
+						<div class="mt-4 border-bottom pb-4	">
+							{% if liked == false %}
+								<a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'true'}) }}">
+									<button class="btn btn-outline btn-success">Like</button>
+								</a>
+							{% endif %}
+							{% if liked == true %}
+								<a href="{{ path('likeArticle', {'idArticle': article.id, 'liked': 'false'}) }}">
+									<button class="btn btn-outline btn-danger">Unlike</button>
+								</a>
+							{% endif %}
+							{% if shared == false %}
+								<a href="{{ path('shareArticle', {'idArticle': article.id}) }}">
+									<button class="btn btn-outline btn-primary">Share</button>
+								</a>
+							{% endif %}
+							{% if shared == true %}
+								<span class="badge badge-light">Shared</span>
+							{% endif %}
+						</div>
+						<div class="mt-5 pb-2">
+
+							<span>Send a comment :</span><br><br>
+							<div class="text-muted">
+								<input name="lastName" type="text" disabled value="{{ comment.author.lastName }}">
+								<input name="email" type="text" disabled value="{{ comment.author.email }}">
+							</div>
+							{{ form_start(form) }}
+							{{ form_widget(form) }}
+							{{ form_end(form) }}
+						</div>
+					{% endif %}
+					<div>
+						<h1>All Comments</h1>
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">Comments</th>
+									<th scope="col">Author</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								{% for comment in commentList %}
+									<tr>
+										{% if comment.approved == true %}
+											<td>
+												{{ comment.content }}
+											</td>
+											<td>{{ comment.author.email }}</td>
+										{% endif %}
+										{% if app.user %}
+											{% if comment.approved == null and app.user.email == comment.author.email %}
+												<td class="bg-warning  text-muted">{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}}</td>
+												<td class="text-warning">
+													Your comment is awaiting verification</td>
+											{% endif %}
+										{% endif %}
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
 					</div>
-					{{ form_start(form) }}
-					{{ form_widget(form) }}
-					{{ form_end(form) }}
 				</div>
-			{% endif %}
-			<div>
-				<h1>All Comments</h1>
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col">Comments</th>
-							<th scope="col">Author</th>
-						</tr>
-					</thead>
-
-					<tbody>
-						{% for comment in commentList %}
-							<tr>
-								{% if comment.approved == true %}
-									<td>
-										{{ comment.content }}
-									</td>
-									<td>{{ comment.author.email }}</td>
-								{% endif %}
-								{% if app.user %}
-									{% if comment.approved == null and app.user.email == comment.author.email %}
-										<td class="bg-warning  text-muted">{{ comment.content|length > 10 ? comment.content|slice(0, 10) ~ '...' : comment.content}}</td>
-										<td class="text-warning">
-											Your comment is awaiting verification</td>
-									{% endif %}
-								{% endif %}
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+				<div class="card-footer text-muted  col-md-12 et col-xs-6">
+					Made by :
+					{{ article.author.firstName }}
+					{{ article.author.lastName }}<br>
+					Date :
+					{{ stringDate }}
+				</div>
 			</div>
 		</div>
-		<div class="card-footer text-muted">
-			Made by :
-			{{ article.author.firstName }}
-			{{ article.author.lastName }}<br>
-			Date :
-			{{ stringDate }}
-		</div>
-		{# </div> #}
 	</div>
 	{# FIN CARD #}
 
-	<div class="example-wrapper">
+	<div class="container">
 		<h3>Articles récents</h3>
 		<div class="row">
 			{% for recentArticle in recentArticles %}
-				<div class="col-md-4">
+				<div class="col-md-3 col-12">
 					<div class="card mb-2">
-						<img
-						id="article_{{ recentArticle.id }}" onerror="standby('article_{{ recentArticle.id }}')" class="card-img-top" src="{{ asset('uploads/images/' ~ recentArticle.image) }}" alt=" card image cap">
-						{# <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg" alt="Card image cap"> #}
+						<img id="article_{{ recentArticle.id }}" onerror="standby('article_{{ recentArticle.id }}')" class="card-img-top" src="{{ asset('uploads/images/' ~ recentArticle.image) }}" alt=" card image cap">
 						<div class="card-body">
 							<h4 class="card-title">{{ recentArticle.title }}</h4>
 							<p class="card-subtitle">
@@ -119,9 +117,7 @@
 						</div>
 					</div>
 				</div>
-				{# <div>
-																																																																																																																																																																																																																																										{{ recentArticle.title }}
-																																																																																																																																																																																																																																										</div> #}
+
 			{% endfor %}
 		</div>
 	</div>
