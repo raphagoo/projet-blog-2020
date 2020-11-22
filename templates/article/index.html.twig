@@ -9,11 +9,11 @@
 		<div class="card p-3 mx-auto my-5">
 			<div class="row">
 
-				<div class="card-header  col-md-12 et col-xs-6">
+				<div class="card-header  col-md-12 col-12">
 					<h2 class="card-title">{{ article.title }}</h2>
 					<h4 class="card-subtitle mb-2 text-muted">{{ article.subtitle }}</h4>
 				</div>
-				<div class="card-body  col-md-12 et col-xs-6">
+				<div class="card-body  col-md-12 col-12">
 
 					<img id="article_{{ article.id }}" onerror="standby('article_{{ article.id }}')" style="max-width: 400px" class="articleImage" src="{{ asset('uploads/images/' ~ article.image) }}">
 					<p class="card-text contentCard">{{ article.content }}</p>
@@ -88,7 +88,7 @@
 						</table>
 					</div>
 				</div>
-				<div class="card-footer text-muted  col-md-12 et col-xs-6">
+				<div class="card-footer text-muted  col-md-12 col-12">
 					Made by :
 					{{ article.author.firstName }}
 					{{ article.author.lastName }}<br>
@@ -104,7 +104,7 @@
 		<h3>Articles récents</h3>
 		<div class="row">
 			{% for recentArticle in recentArticles %}
-				<div class="col-md-3 col-sm-6 col-xs-12">
+				<div class="col-md-3 col-sm-6 col-12">
 					<div class="card mb-2">
 						<img id="article_{{ recentArticle.id }}" onerror="standby('article_{{ recentArticle.id }}')" class="card-img-top" src="{{ asset('uploads/images/' ~ recentArticle.image) }}" alt=" card image cap">
 						<div class="card-body">
