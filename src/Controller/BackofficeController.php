@@ -6,7 +6,11 @@ use App\BL\ArticleManager;
 use App\BL\CommentManager;
 use App\BL\UserManager;
 use App\Entity\Article;
+use App\Entity\User;
 use App\Form\ArticleFormType;
+use App\Form\UserCreateFromAdminType;
+use App\Form\UserCreateType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -115,5 +119,40 @@ class BackofficeController extends AbstractController
         $comment->setApproved($approved);
         $this->commentManager->saveData($comment);
         return $this->redirectToRoute('backofficeComment');
+    }
+
+
+    /**
+     * @Route ("/backoffice/users/addUser", name="addUser")
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function register(Request $request, UserRepository $userRepository): Response
+    {
+        $user = new User();
+        dump("MY USER ! ");
+        dump($user);
+        $form = $this->createForm(UserCreateFromAdminType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $userWithEmail = $userRepository->findOneByEmail($user->getEmail());
+
+            // Verification e-mail non existant
+            if (!$userWithEmail) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+                $this->addFlash('success', 'The new user has been successfully created');
+                dump("I'M BEEING REDIRECTED HERE");
+            } else {
+                $this->addFlash('danger', 'An account already exists with this email');
+            }
+        }
+
+        return $this->render('user/addFromBackoffice.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

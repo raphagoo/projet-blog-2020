@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Article|null find($id, $lockMode = null, $lockVersion = null)
@@ -65,20 +66,19 @@ class ArticleRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    // /**
-    //  * @return Article[] Returns an array of Article objects
-    //  */
-
-    public function findLikedArticles()
+    /**
+     * @param UserInterface $user
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findLikedArticles(UserInterface $user)
     {
-        $entityManager = $this->getEntityManager();
-
-        $query = $entityManager->createQuery(
-            'SELECT a FROM App\Entity\Article a, App\Entity\Like l WHERE a.id = l.article'
-        );
-
-        // returns an array of Product objects
-        return $query->getResult();
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.likes', 'l')
+            ->andWhere('l.author = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
     }
     // $qb = $this->_em->createQueryBuilder();
     // $qb->select('t, c')

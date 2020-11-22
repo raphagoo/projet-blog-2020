@@ -22,20 +22,29 @@ class UserController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function register(Request $request): Response
+    public function register(Request $request, UserRepository $userRepository): Response
     {
         $user = new User();
         $form = $this->createForm(UserCreateType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setRoles(['ROLE_USER']);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $userWithEmail = $userRepository->findOneByEmail($user->getEmail());
 
-            return $this->redirectToRoute('app_login');
+            // Verification e-mail non existant
+            if (!$userWithEmail) {
+
+                $user->setRoles(['ROLE_USER']);
+
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_login');
+            } else {
+                $this->addFlash('danger', 'An account already exists with this email');
+            }
         }
 
         return $this->render('user/new.html.twig', [
@@ -57,14 +66,10 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-
             $userWithEmail = $userRepository->findOneByEmail($user->getEmail());
 
             // Verification e-mail non existant
             if (!$userWithEmail || $userWithEmail == $userBeforeChange) {
-                dump('toto');
-
                 $this->getDoctrine()->getManager()->flush();
                 $this->addFlash('success', 'Your profile has been successfully updated');
             } else {
@@ -114,17 +119,17 @@ class UserController extends AbstractController
     /**
      * @Route("/profile/likedArticles", name="profile_liked_articles")
      * @param Request $request
+     * @param ArticleRepository $articleRepository
      * @return Response
      */
     public function profileLikedArticles(Request $request, ArticleRepository $articleRepository): Response
     {
         $user = $this->getUser();
-        $test = $articleRepository->findLikedArticles();
-        dump($test);
+        $articles = $articleRepository->findLikedArticles($user);
 
-
-        return $this->render('user/edit.html.twig', [
+        return $this->render('user/liked_articles.html.twig', [
             'user' => $user,
+            'articles' => $articles
         ]);
     }
 }
