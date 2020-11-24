@@ -14,6 +14,7 @@ use App\Entity\Share;
 use App\Form\ArticleFormType;
 use App\Form\CommentFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
@@ -63,6 +64,7 @@ class ArticleController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/article/add", name="addArticle")
      * @param Request $request
      * @return Response
@@ -108,6 +110,7 @@ class ArticleController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/article/edit/{idArticle}", name="editArticle")
      * @param $idArticle
      * @param Request $request
@@ -165,6 +168,7 @@ class ArticleController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/article/delete/{idArticle}", name="deleteArticle")
      * @param $idArticle
      */
@@ -224,6 +228,7 @@ class ArticleController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route ("/article/{idArticle}/share", name="shareArticle")
      * @param $idArticle
      * @return RedirectResponse
@@ -240,6 +245,7 @@ class ArticleController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route ("/article/{idArticle}/{liked}", name="likeArticle")
      * @param $idArticle
      * @param $liked

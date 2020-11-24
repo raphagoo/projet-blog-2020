@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\BL\CategoryManager;
@@ -38,6 +40,7 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("category/add", name="addCategory")
      * @param Request $request
      * @return Response
@@ -59,6 +62,7 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("category/edit/{idCategory}", name="editCategory")
      * @param $idCategory
      * @param Request $request
@@ -80,6 +84,7 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("category/delete/{idCategory}",name="deleteCategory")
      * @param $idCategory
      * @return RedirectResponse|Response

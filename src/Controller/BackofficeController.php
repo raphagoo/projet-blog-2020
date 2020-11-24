@@ -8,6 +8,7 @@ use App\BL\UserManager;
 use App\Entity\Article;
 use App\Entity\User;
 use App\Form\ArticleFormType;
+use App\Form\SearchCommentFormType;
 use App\Form\UserCreateFromAdminType;
 use App\Form\UserCreateType;
 use App\Repository\UserRepository;
@@ -71,12 +72,13 @@ class BackofficeController extends AbstractController
      */
     public function articles(Request $request): Response
     {
-        $articles = $this->articleManager->listArticles($request);
         $form = $this->createForm(SearchFormType::class);
+        $articles = $this->articleManager->listArticles($request);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $searchTerm = $form->get('search')->getData();
-            $articles = $this->articleManager->listArticles($request, $searchTerm);
+            $categoryTerm = $form->get('category')->getData();
+            $articles = $this->articleManager->listArticles($request, $searchTerm, $categoryTerm);
         }
         return $this->render('backoffice/articles.html.twig', ['articles' => $articles, 'form' => $form->createView()]);
     }
@@ -108,11 +110,12 @@ class BackofficeController extends AbstractController
     public function commentList(Request $request)
     {
         $comments = $this->commentManager->listComments($request);
-        $form = $this->createForm(SearchFormType::class);
+        $form = $this->createForm(SearchCommentFormType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $searchTerm = $form->get('search')->getData();
-            $comments = $this->commentManager->listComments($request, $searchTerm);
+            $statusTerm = $form->get('approved')->getData();
+            $comments = $this->commentManager->listComments($request, $searchTerm, $statusTerm);
         }
         return $this->render('backoffice/comments.html.twig', ['comments' => $comments, 'form' => $form->createView()]);
     }

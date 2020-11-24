@@ -30,6 +30,11 @@
       {{ knp_pagination_sortable(articles, 'Release', ['a.publicationDate']) }}
     </span>
   </div>
+  <div class="sortItem">
+    <span{% if articles.isSorted(['au.lastName']) %} class="sorted"{% endif %}>
+      {{ knp_pagination_sortable(articles, 'Author', ['au.lastName']) }}
+    </span>
+  </div>
 
 {% for article in articles %}
 <div class="card" style="margin-top: 2%">

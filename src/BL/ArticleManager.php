@@ -30,9 +30,9 @@ class ArticleManager
         return $this->em->getRepository(Article::class)->findAll();
     }
 
-    public function listArticles(Request $request, $searchTerm = null)
+    public function listArticles(Request $request, $searchTerm = null, $categoryTerm = [])
     {
-        return $this->em->getRepository(Article::class)->listArticles($request, $searchTerm);
+        return $this->em->getRepository(Article::class)->listArticles($request,$searchTerm, $categoryTerm);
     }
 
     /**

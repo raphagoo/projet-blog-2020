@@ -27,15 +27,29 @@ class ArticleRepository extends ServiceEntityRepository
         $this->knp = $knp;
     }
 
-    public function listArticles(Request $request, $searchTerm = null)
+    public function listArticles(Request $request, $searchTerm = null, $categoryTerm = [])
     {
         $entityManager = $this->getEntityManager();
-        $query = $entityManager->createQuery(
-            'SELECT a
+        if($categoryTerm == []){
+            $query = $entityManager->createQuery(
+                'SELECT a
             FROM App\Entity\Article a
+            LEFT JOIN a.author au
             WHERE a.title LIKE :searchTerm'
-        )
-            ->setParameter('searchTerm', '%'.$searchTerm.'%');
+            );
+        }
+        else {
+            $query = $entityManager->createQuery(
+                'SELECT a
+            FROM App\Entity\Article a
+            LEFT JOIN a.author au
+            WHERE a.title LIKE :searchTerm
+            AND a.category IN (:categoryTerm)'
+            );
+            $query->setParameter('categoryTerm', $categoryTerm);
+        }
+
+        $query->setParameter('searchTerm', '%'.$searchTerm.'%');
 
         return $this->knp->paginate(
             $query, /* query NOT result */

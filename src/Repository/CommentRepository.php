@@ -27,16 +27,32 @@ class CommentRepository extends ServiceEntityRepository
         $this->knp = $knp;
     }
 
-    public function listComments(Request $request, $searchTerm = null)
+    public function listComments(Request $request, $searchTerm = null, $statusTerm = [null])
     {
         $entityManager = $this->getEntityManager();
-        $query = $entityManager->createQuery(
-            'SELECT c
+        if(in_array(NULL, $statusTerm)){
+            $query = $entityManager->createQuery(
+                'SELECT c
             FROM App\Entity\Comment c
             LEFT JOIN c.article a
-            WHERE a.title LIKE :searchTerm'
-        )
-            ->setParameter('searchTerm', '%'.$searchTerm.'%');
+            LEFT JOIN c.author au
+            WHERE a.title LIKE :searchTerm
+            AND c.approved IN (:statusTerm) OR c.approved IS NULL'
+            );
+        }
+        else{
+            $query = $entityManager->createQuery(
+                'SELECT c
+            FROM App\Entity\Comment c
+            LEFT JOIN c.article a
+            LEFT JOIN c.author au
+            WHERE a.title LIKE :searchTerm
+            AND c.approved IN (:statusTerm)'
+            );
+        }
+
+        $query->setParameter('searchTerm', '%'.$searchTerm.'%');
+        $query->setParameter('statusTerm', $statusTerm);
 
         return $this->knp->paginate(
             $query, /* query NOT result */

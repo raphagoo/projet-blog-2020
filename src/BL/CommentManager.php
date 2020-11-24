@@ -39,8 +39,8 @@ class CommentManager
         return $this->em->getRepository(Comment::class)->find($idComment);
     }
 
-    public function listComments(Request $request, $searchTerm = null){
-        return $this->em->getRepository(Comment::class)->listComments($request, $searchTerm);
+    public function listComments(Request $request, $searchTerm = null, $statusTerm = [null]){
+        return $this->em->getRepository(Comment::class)->listComments($request, $searchTerm, $statusTerm);
     }
 
     public function countWaitingComments(){

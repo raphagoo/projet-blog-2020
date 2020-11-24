@@ -16,12 +16,17 @@
     </div>
     <div class="sortItem">
     				<span{% if comments.isSorted('a.Title') %} class="sorted"{% endif %}>
-    				  {{ knp_pagination_sortable(comments, 'Article title', 'a.title') }}
+    				  {{ knp_pagination_sortable(comments, 'Article', 'a.title') }}
     				</span>
     </div>
     <div class="sortItem">
     				<span{% if comments.isSorted('c.approved') %} class="sorted"{% endif %}>
     				  {{ knp_pagination_sortable(comments, 'Status', 'c.approved') }}
+    				</span>
+    </div>
+    <div class="sortItem">
+    				<span{% if comments.isSorted('au.email') %} class="sorted"{% endif %}>
+    				  {{ knp_pagination_sortable(comments, 'Author\'s email', 'au.email') }}
     				</span>
     </div>
     <table class="table">
