@@ -21,10 +21,61 @@
 	</style>
 
 	<h1 class="text-center mt-2">BackOffice</h1>
-
 	<div class="example-wrapper d-flex justify-content-center mb-5">
-		<a class="w-25 p-3 btn btn-success m-2 " href="{{ path('backofficeArticle') }}">Articles</a>
-		<a class="w-25 p-3 btn btn-success m-2" href="{{ path('backofficeComment') }}">Comments</a>
+		<a class="w-25 p-4 btn btn-success m-2 " href="{{ path('backofficeArticle') }}">Articles</a>
+		<a class="w-25 p-3 btn btn-success m-2" href="{{ path('backofficeComment') }}">
+			Comments
+			<button class="btn btn-danger"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bell" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+				<path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2z"/>
+				<path fill-rule="evenodd" d="M8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+			</svg> {{ nbWaitingComments }}</button>
+		</a>
+		<a class="w-25 p-4 btn btn-success m-2 " href="{{ path('backofficeArticle') }}">Articles</a>
 	</div>
-	<div class="test"></div>
+	<h2 class="text-center">Recent Articles</h2>
+	<div class="recentArticlesContainer">
+		{% for article in recentArticles %}
+		<div class="card" style="margin-top: 2%">
+			<div class="card-header">
+				{{ article.author.firstName }} {{ article.author.lastName }}
+				<div class="row">
+					<div class="col-sm-12 col-xs-12">
+						<h2>{{ article.title }}</h2>
+					</div>
+					<div class="col-sm-12 col-xs-12">
+						{{ article.publicationDate|date("d/m/Y H:i:s", "Europe/Paris") }}
+					</div>
+					<div class="col-sm-6 col-xs-6">
+						{{ article.category.name }}
+					</div>
+					<div class="offset-sm-2 col-sm-2 col-xs-2">
+						Likes : {{ article.likes|length }}
+					</div>
+					<div class="col-sm-2 col-xs-2">
+						Shares : {{ article.shares|length }}
+					</div>
+				</div>
+			</div>
+
+			<div class="card-body">
+				<img id="article_{{ article.id }}" onerror="standby('article_{{ article.id }}')" style="max-width: 400px" class="articleImage rounded mx-auto d-block" src="{{ asset('uploads/images/' ~ article.image) }}" alt="article picture">
+				<p class="card-text">
+					{{ article.content|length > 300 ? article.content|slice(0, 300) ~ '...' : article.content}}
+				</p>
+
+				<div class="margin-top">
+
+
+					<a href="{{ path('viewArticle', {'idArticle': article.id}) }}" class="btn btn-primary">View article</a>
+
+					{% if app.user and is_granted('ROLE_ADMIN')%}
+						<a href="{{ path('editArticle', {'idArticle': article.id}) }}" class="btn btn-primary">Edit article</a>
+
+					{% endif %}
+				</div>
+			</div>
+
+		</div>
+		{% endfor %}
+	</div>
 {% endblock %}

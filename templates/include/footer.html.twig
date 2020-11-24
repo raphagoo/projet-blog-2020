@@ -1,6 +1,3 @@
-<style>
-    .imgFoot{ width: 5%;}
-</style>
 <footer class="page-footer bg-light position-sticky ">
   <div class="container">
     <div class="row">
@@ -8,20 +5,24 @@
         <div class="mb-5 flex-center">
           <!-- Facebook -->
           <a class="fb-ic">
-            <span>Facebook</span>
             <img class="imgFoot" src="/images/facebook.png" alt="Facebook" >
           </a>
           <!-- Twitter -->
           <a class="tw-ic">
-          <span>Instagram</span>
-          {# <span>Instagram</span> #}
           <img class="imgFoot" src="/images/instagram.png" alt="Instagram" >
           </a>
 
-          <a class="gplus-ic" href="">
-          <span>Twitter</span>
+          <a class="gplus-ic">
             <img class="imgFoot" src="/images/twitter.png" alt="Instagram" >
-          </a>         
+          </a>
+          {% if app.user %}
+            <span>
+              -
+            </span>
+            <a class="" href="{{ path('newsletter') }}">
+              Newsletter
+            </a>
+          {% endif %}
         </div>
       </div>
     </div>

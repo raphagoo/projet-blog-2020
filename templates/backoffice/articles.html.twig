@@ -9,34 +9,52 @@
 			<div class="col s12">
 
 				<h1>Backoffice - Articles</h1>
+				<a href="{{ path('backofficeAddArticle') }}"><button class="btn btn-primary">Add article</button></a>
+				<div class="d-flex">
+					{{ form_start(form) }}
+					{{ form_widget(form) }}
+					{{ form_end(form) }}
+				</div>
+				<div class="sortItem">
+    				<span{% if articles.isSorted('a.Title') %} class="sorted"{% endif %}>
+    				  {{ knp_pagination_sortable(articles, 'Title', 'a.title') }}
+    				</span>
+				</div>
+				<div class="sortItem">
+    				<span{% if articles.isSorted('a.publicationDate') %} class="sorted"{% endif %}>
+    				  {{ knp_pagination_sortable(articles, 'Release', 'a.publicationDate') }}
+    				</span>
+				</div>
 				<table class="table">
 					<thead>
 						<tr class="row">
-							<th class="col-6 col-md-4">#</th>
-							<th class="col-6 col-md-4">Article</th>
-							<th class="col-6 col-md-4"></th>
+							<th class="col-2">#</th>
+							<th class="col-7">Article</th>
+							<th class="col-2"></th>
 						</tr>
 					</thead>
 
 					<tbody>
 						{% for article in articles %}
 							<tr class="row">
-								<td class="col-6 col-md-4">
+								<td class="col-2">
 									{{ article.id }}
 								</td>
-								<td class="col-6 col-md-4">{{ article.title }}</td>
-								<td class="col-6 col-md-4">
+								<td class="col-7">{{ article.title }}</td>
+								<td class="col-2">
 									<a href="{{ path('editArticle', {'idArticle': article.id}) }}">
-										<button class="btn btn-info" type="button">edit</button>
+										<button class="btn btn-info" type="button">Edit</button>
 									</a>
 								</td>
 							</tr>
 						{% endfor %}
-
 					</tbody>
-				</tbody>
 			</table>
-			<a href="{{ path('backofficeAddArticle') }}">Ajouter un article</a>
+			{% if articles %}
+				<div class="navigation">
+					{{ knp_pagination_render(articles) }}
+				</div>
+			{% endif %}
 		</div>
 	</div>
 </div>{% endblock %}

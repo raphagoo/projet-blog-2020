@@ -19,11 +19,27 @@
 				{{ form_row(form.tag) }}
 				{{ form_widget(form) }}
 				{{ form_end(form) }}
-				{% if is_granted('ROLE_ADMIN') %}
-					<a href="{{ path('deleteArticle', {'idArticle': article.id}) }}">
-						<button class="btn btn-danger" type="button">Remove</button>
-					</a>
-				{% endif %}
+				<a href="{{ path('deleteArticle', {'idArticle': article.id}) }}">
+					<button class="btn btn-danger" type="button">Remove</button>
+				</a>
+					<table class="table">
+						<thead>
+						<tr>
+							<th scope="col">Email</th>
+							<th scope="col">Status</th>
+							<th scope="col"></th>
+						</tr>
+						</thead>
+						<tbody>
+						{% for comment in article.comments %}
+							<tr>
+								<td>{{ comment.author.email }}</td>
+								<td>{% if comment.approved is same as(true) %} Approved {% endif %} {% if comment.approved is same as (false) %} Refused {% endif %} {% if comment.approved is same as (null) %} Waiting {% endif %}</td>
+								<td><a href="{{ path('editComment', {'idComment': comment.id}) }}"><button class="btn btn-info" type="button">View/Approve</button></a></td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
 			</div>
 		</div>
 	</div>

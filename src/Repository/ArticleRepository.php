@@ -57,12 +57,30 @@ class ArticleRepository extends ServiceEntityRepository
             'SELECT a
             FROM App\Entity\Article a
             WHERE a.id != :idArticle
-            ORDER BY a.publicationDate ASC'
+            ORDER BY a.publicationDate DESC'
         )
             ->setParameter('idArticle', $idArticle)
             ->setMaxResults(4);
 
-        // returns an array of Product objects
+        // returns an array of Article objects
+        return $query->getResult();
+    }
+
+    /**
+     * @return Article[]
+     */
+    public function findRecentsBack(): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT a
+            FROM App\Entity\Article a
+            ORDER BY a.publicationDate DESC'
+        )
+            ->setMaxResults(5);
+
+        // returns an array of Article objects
         return $query->getResult();
     }
 

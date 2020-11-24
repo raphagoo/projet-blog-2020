@@ -59,6 +59,11 @@ class ArticleManager
         return $this->em->getRepository(Article::class)->findRecents($idArticle);
     }
 
+    public function getRecentArticlesBack()
+    {
+        return $this->em->getRepository(Article::class)->findRecentsBack();
+    }
+
     /**
      * @param $article
      */

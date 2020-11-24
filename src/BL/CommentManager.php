@@ -6,6 +6,7 @@ namespace App\BL;
 
 use App\Entity\Comment;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class CommentManager
 {
@@ -36,5 +37,13 @@ class CommentManager
      */
     public function getCommentById($idComment){
         return $this->em->getRepository(Comment::class)->find($idComment);
+    }
+
+    public function listComments(Request $request, $searchTerm = null){
+        return $this->em->getRepository(Comment::class)->listComments($request, $searchTerm);
+    }
+
+    public function countWaitingComments(){
+        return $this->em->getRepository(Comment::class)->count(['approved' => null]);
     }
 }
