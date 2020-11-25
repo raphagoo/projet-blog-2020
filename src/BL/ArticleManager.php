@@ -7,6 +7,7 @@ namespace App\BL;
 use App\Entity\Article;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class ArticleManager
@@ -43,6 +44,42 @@ class ArticleManager
     public function listArticles(Request $request, $searchTerm = null, $categoryTerm = [])
     {
         return $this->em->getRepository(Article::class)->listArticles($request,$searchTerm, $categoryTerm);
+    }
+
+    /**
+     * @param Request $request
+     * @param UserInterface $user
+     * @param null $searchTerm
+     * @param array $categoryTerm
+     * @return mixed
+     */
+    public function listLikedArticles(Request $request, UserInterface $user, $searchTerm = null, $categoryTerm = [])
+    {
+        return $this->em->getRepository(Article::class)->findLikedArticles($user, $request, $searchTerm, $categoryTerm);
+    }
+
+    /**
+     * @param Request $request
+     * @param UserInterface $user
+     * @param null $searchTerm
+     * @param array $categoryTerm
+     * @return mixed
+     */
+    public function listSharedArticles(Request $request, UserInterface $user, $searchTerm = null, $categoryTerm = [])
+    {
+        return $this->em->getRepository(Article::class)->findSharedArticles($user, $request, $searchTerm, $categoryTerm);
+    }
+
+    /**
+     * @param Request $request
+     * @param UserInterface $user
+     * @param null $searchTerm
+     * @param array $categoryTerm
+     * @return mixed
+     */
+    public function listCommentedArticles(Request $request, UserInterface $user, $searchTerm = null, $categoryTerm = [])
+    {
+        return $this->em->getRepository(Article::class)->findCommentedArticles($user, $request, $searchTerm, $categoryTerm);
     }
 
     /**
