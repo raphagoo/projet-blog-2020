@@ -4,12 +4,11 @@
 {% endblock %}
 
 {% block body %}
-
     <div class="example-wrapper">
 
-        <h1>Liked Articles</h1>
+        <h1>Shared Articles</h1>
 
-        {% for article in liked_articles %}
+        {% for article in shared_articles %}
             {% include 'include/article_card.html.twig' %}
         {% endfor %}
     </div>

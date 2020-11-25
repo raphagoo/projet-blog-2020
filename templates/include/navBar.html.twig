@@ -1,7 +1,3 @@
-<style>
-
-</style>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<a class="navbar-brand" href="{{ path('default') }}">SNRK</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +44,8 @@
 							{{app.user.email}}
 						</a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item" href="{{path('profile_private_informations')}}">Edit Profil</a>
+							<a class="dropdown-item" href="{{path('profile')}}">Profile</a>
+							<a class="dropdown-item" href="{{path('profile_private_informations')}}">Edit Profile</a>
 							<a class="dropdown-item" href="{{path('app_logout')}}">Logout</a>
 						</div>
 					</li>
