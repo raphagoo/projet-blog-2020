@@ -160,8 +160,6 @@ class BackofficeController extends AbstractController
     public function register(Request $request, UserRepository $userRepository): Response
     {
         $user = new User();
-        dump("MY USER ! ");
-        dump($user);
         $form = $this->createForm(UserCreateFromAdminType::class, $user);
         $form->handleRequest($request);
 
@@ -169,13 +167,12 @@ class BackofficeController extends AbstractController
 
             $userWithEmail = $userRepository->findOneByEmail($user->getEmail());
 
-            // Verification e-mail non existant
+            // Verify email not already attributed
             if (!$userWithEmail) {
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
                 $this->addFlash('success', 'The new user has been successfully created');
-                dump("I'M BEEING REDIRECTED HERE");
             } else {
                 $this->addFlash('danger', 'An account already exists with this email');
             }
