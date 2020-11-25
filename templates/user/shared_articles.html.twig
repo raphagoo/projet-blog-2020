@@ -4,12 +4,56 @@
 {% endblock %}
 
 {% block body %}
-    <div class="example-wrapper">
 
-        <h1>Shared Articles</h1>
+    <div class="row">
 
-        {% for article in shared_articles %}
-            {% include 'include/article_card.html.twig' %}
-        {% endfor %}
+        <div class="col-2 shadow-lg p-3 mb-5 ml-4 mt-5 bg-white rounded menuSearch position-fixed">
+            {{form_start(form)}}
+            <div
+                    class="row ml-2">
+                {# <div class="col-4 pt-3">{{form_row(form.search)}}</div>
+																																																<div class="col-4">{{form_row(form.category)}}</div>
+																																																<div class="col-4 pt-3">{{form_row(form.Search)}}</div> #}
+                {{ form(form)}}
+
+            </div>
+            {{form_end(form)}}
+            <div class="row justify-content-start">
+
+                <div class="sortItem mx-2">
+						<span {% if shared_articles.isSorted('a.Title') %} class="sorted" {% endif %}>
+							{{ knp_pagination_sortable(shared_articles, 'Title', 'a.title') }}
+						</span>
+                </div>
+                <div class="sortItem mx-2">
+						<span {% if shared_articles.isSorted(['a.publicationDate']) %} class="sorted" {% endif %}>
+							{{ knp_pagination_sortable(shared_articles, 'Release', ['a.publicationDate']) }}
+						</span>
+                </div>
+                <div class="sortItem mx-2">
+						<span {% if shared_articles.isSorted(['au.lastName']) %} class="sorted" {% endif %}>
+							{{ knp_pagination_sortable(shared_articles, 'Author', ['au.lastName']) }}
+						</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="example-wrapper mt-5 col-9 marginContentIndex">
+
+            <h1>Shared Articles</h1>
+
+            {% for article in shared_articles %}
+                {% include 'include/article_card.html.twig' %}
+            {% endfor %}
+
+            {% if shared_articles %}
+                <div class="navigation">
+                    {{ knp_pagination_render(shared_articles) }}
+                </div>
+            {% endif %}
+
+        </div>
     </div>
+
+
 {% endblock %}

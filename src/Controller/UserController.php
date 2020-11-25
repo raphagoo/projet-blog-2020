@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
+use App\BL\ArticleManager;
 use App\Entity\User;
 use App\Form\Model\ChangePassword;
+use App\Form\SearchFormType;
 use App\Form\UserCreateType;
 use App\Form\UserUpdateType;
 use App\Repository\UserRepository;
 use App\Repository\ArticleRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,6 +25,26 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserController extends AbstractController
 {
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+    /**
+     * @var ArticleManager
+     */
+    private $articleManager;
+
+    /**
+     * BackofficeController constructor.
+     * @param EntityManagerInterface $em
+     */
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->articleManager = new ArticleManager($em);
+        $this->em = $em;
+    }
+
     /**
      * @Route("/register", name="register")
      * @param Request $request
@@ -151,51 +174,76 @@ class UserController extends AbstractController
     /**
      * @IsGranted("ROLE_USER")
      * @Route("/profile/likedArticles", name="profile_liked_articles")
-     * @param ArticleRepository $articleRepository
+     * @param Request $request
      * @return Response
      */
-    public function profileLikedArticles(ArticleRepository $articleRepository): Response
+    public function profileLikedArticles(Request $request): Response
     {
         $user = $this->getUser();
-        $liked_articles = $articleRepository->findLikedArticles($user);
+        $form = $this->createForm(SearchFormType::class);
+        $liked_articles = $this->articleManager->listLikedArticles($request, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $searchTerm = $form->get('search')->getData();
+            $categoryTerm = $form->get('category')->getData();
+            $liked_articles = $this->articleManager->listLikedArticles($request, $user, $searchTerm, $categoryTerm);
+        }
 
         return $this->render('user/liked_articles.html.twig', [
             'user' => $user,
-            'liked_articles' => $liked_articles
+            'liked_articles' => $liked_articles,
+            'form' => $form->createView()
         ]);
     }
 
     /**
      * @IsGranted("ROLE_USER")
      * @Route("/profile/sharedArticles", name="profile_shared_articles")
-     * @param ArticleRepository $articleRepository
+     * @param Request $request
      * @return Response
      */
-    public function profileSharedArticles(ArticleRepository $articleRepository): Response
+    public function profileSharedArticles(Request $request): Response
     {
         $user = $this->getUser();
-        $shared_articles = $articleRepository->findSharedArticles($user);
+        $form = $this->createForm(SearchFormType::class);
+        $shared_articles = $this->articleManager->listSharedArticles($request, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $searchTerm = $form->get('search')->getData();
+            $categoryTerm = $form->get('category')->getData();
+            $shared_articles = $this->articleManager->listSharedArticles($request, $user, $searchTerm, $categoryTerm);
+        }
 
         return $this->render('user/shared_articles.html.twig', [
             'user' => $user,
-            'shared_articles' => $shared_articles
+            'shared_articles' => $shared_articles,
+            'form' => $form->createView()
         ]);
     }
 
     /**
      * @IsGranted("ROLE_USER")
      * @Route("/profile/commentedArticles", name="profile_commented_articles")
-     * @param ArticleRepository $articleRepository
+     * @param Request $request
      * @return Response
      */
-    public function profileCommentedArticles(ArticleRepository $articleRepository): Response
+    public function profileCommentedArticles(Request $request): Response
     {
+
         $user = $this->getUser();
-        $commented_articles = $articleRepository->findCommentedArticles($user);
+        $form = $this->createForm(SearchFormType::class);
+        $commented_articles = $this->articleManager->listCommentedArticles($request, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $searchTerm = $form->get('search')->getData();
+            $categoryTerm = $form->get('category')->getData();
+            $commented_articles = $this->articleManager->listCommentedArticles($request, $user, $searchTerm, $categoryTerm);
+        }
 
         return $this->render('user/commented_articles.html.twig', [
             'user' => $user,
-            'commented_articles' => $commented_articles
+            'commented_articles' => $commented_articles,
+            'form' => $form->createView()
         ]);
     }
 }

@@ -43,15 +43,14 @@ class ArticleRepository extends ServiceEntityRepository
     public function listArticles(Request $request, $searchTerm = null, $categoryTerm = [])
     {
         $entityManager = $this->getEntityManager();
-        if($categoryTerm == []){
+        if ($categoryTerm == []) {
             $query = $entityManager->createQuery(
                 'SELECT a
             FROM App\Entity\Article a
             LEFT JOIN a.author au
             WHERE a.title LIKE :searchTerm'
             );
-        }
-        else {
+        } else {
             $query = $entityManager->createQuery(
                 'SELECT a
             FROM App\Entity\Article a
@@ -62,7 +61,7 @@ class ArticleRepository extends ServiceEntityRepository
             $query->setParameter('categoryTerm', $categoryTerm);
         }
 
-        $query->setParameter('searchTerm', '%'.$searchTerm.'%');
+        $query->setParameter('searchTerm', '%' . $searchTerm . '%');
 
         return $this->knp->paginate(
             $query, /* query NOT result */
@@ -113,17 +112,33 @@ class ArticleRepository extends ServiceEntityRepository
 
     /**
      * @param UserInterface $user
-     * @return Article[] Returns an array of Article objects
+     * @param Request $request
+     * @param null $searchTerm
+     * @param array $categoryTerm
+     * @return PaginationInterface Returns an array of Article objects
      */
-    public function findLikedArticles(UserInterface $user)
+    public function findLikedArticles(UserInterface $user, Request $request, $searchTerm = null, $categoryTerm = [])
     {
-        return $this->createQueryBuilder('a')
+        $qb = $this->createQueryBuilder('a')
+            ->leftJoin('a.author', 'au')
             ->leftJoin('a.likes', 'l')
             ->andWhere('l.author = :user')
-            ->setParameter('user', $user)
-            ->getQuery()
-            ->getResult()
-        ;
+            ->setParameter('user', $user);
+        if ($categoryTerm == []) {
+            $qb->andWhere($qb->expr()->like('a.title', ':searchTerm'));
+        } else {
+            $qb->andWhere($qb->expr()->like('a.title', ':searchTerm'))
+                ->andWhere("a.category IN(:categoryTerm)")
+                ->setParameter('categoryTerm', $categoryTerm);
+        }
+        $query = $qb->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->getQuery();
+
+        return $this->knp->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            5 /*limit per page*/
+        );
     }
 
     /**
@@ -139,23 +154,38 @@ class ArticleRepository extends ServiceEntityRepository
             ->orderBy('l.dateLike', 'DESC')
             ->setMaxResults(5)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     /**
      * @param UserInterface $user
-     * @return Article[] Returns an array of Article objects
+     * @param Request $request
+     * @param null $searchTerm
+     * @param array $categoryTerm
+     * @return PaginationInterface Returns an array of Article objects
      */
-    public function findSharedArticles(UserInterface $user)
+    public function findSharedArticles(UserInterface $user, Request $request, $searchTerm = null, $categoryTerm = [])
     {
-        return $this->createQueryBuilder('a')
+        $qb = $this->createQueryBuilder('a')
+            ->leftJoin('a.author', 'au')
             ->leftJoin('a.shares', 's')
             ->andWhere('s.author = :user')
-            ->setParameter('user', $user)
-            ->getQuery()
-            ->getResult()
-            ;
+            ->setParameter('user', $user);
+        if ($categoryTerm == []) {
+            $qb->andWhere($qb->expr()->like('a.title', ':searchTerm'));
+        } else {
+            $qb->andWhere($qb->expr()->like('a.title', ':searchTerm'))
+                ->andWhere("a.category IN(:categoryTerm)")
+                ->setParameter('categoryTerm', $categoryTerm);
+        }
+        $query = $qb->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->getQuery();
+
+        return $this->knp->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            5 /*limit per page*/
+        );
     }
 
     /**
@@ -171,23 +201,38 @@ class ArticleRepository extends ServiceEntityRepository
             ->orderBy('s.dateShare', 'DESC')
             ->setMaxResults(5)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
 
     /**
      * @param UserInterface $user
-     * @return Article[] Returns an array of Article objects
+     * @param Request $request
+     * @param null $searchTerm
+     * @param array $categoryTerm
+     * @return PaginationInterface Returns an array of Article objects
      */
-    public function findCommentedArticles(UserInterface $user)
+    public function findCommentedArticles(UserInterface $user, Request $request, $searchTerm = null, $categoryTerm = [])
     {
-        return $this->createQueryBuilder('a')
+        $qb = $this->createQueryBuilder('a')
+            ->leftJoin('a.author', 'au')
             ->leftJoin('a.comments', 'c')
             ->andWhere('c.author = :user')
-            ->setParameter('user', $user)
-            ->getQuery()
-            ->getResult()
-            ;
+            ->setParameter('user', $user);
+        if ($categoryTerm == []) {
+            $qb->andWhere($qb->expr()->like('a.title', ':searchTerm'));
+        } else {
+            $qb->andWhere($qb->expr()->like('a.title', ':searchTerm'))
+                ->andWhere("a.category IN(:categoryTerm)")
+                ->setParameter('categoryTerm', $categoryTerm);
+        }
+        $query = $qb->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->getQuery();
+
+        return $this->knp->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            5 /*limit per page*/
+        );
     }
 
     /**
@@ -203,8 +248,7 @@ class ArticleRepository extends ServiceEntityRepository
             ->orderBy('c.creationDate', 'DESC')
             ->setMaxResults(5)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
     }
     // $qb = $this->_em->createQueryBuilder();
     // $qb->select('t, c')
@@ -216,8 +260,6 @@ class ArticleRepository extends ServiceEntityRepository
 
     //     SELECT article.* FROM article , like
     // WHERE like.Article =:article AND like.user = :user
-
-
 
 
     // /**
