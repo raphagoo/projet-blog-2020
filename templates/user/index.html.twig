@@ -3,43 +3,28 @@
 {% block title %}User index{% endblock %}
 
 {% block body %}
-    <h1>User index</h1>
+    <div class="example-wrapper">
+        <h1>Your Profile</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>Password</th>
-                <th>FirstName</th>
-                <th>LastName</th>
-                <th>PhoneNumber</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.firstName }}</td>
-                <td>{{ user.lastName }}</td>
-                <td>{{ user.phoneNumber }}</td>
-                <td>
-                    <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
+        <h2>Last liked articles</h2>
+        <a href="{{ path('profile_liked_articles') }}" class="btn btn-info">See all</a>
+
+        {% for article in liked_articles %}
+            {% include 'include/article_card.html.twig' %}
         {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('user_new') }}">Create new</a>
+        <h2>Last shared articles</h2>
+        <a href="{{ path('profile_shared_articles') }}" class="btn btn-info">See all</a>
+
+        {% for article in shared_articles %}
+            {% include 'include/article_card.html.twig' %}
+        {% endfor %}
+
+        <h2>Last commented articles</h2>
+        <a href="{{ path('profile_commented_articles') }}" class="btn btn-info">See all</a>
+
+        {% for article in commented_articles %}
+            {% include 'include/article_card.html.twig' %}
+        {% endfor %}
+    </div>
 {% endblock %}
