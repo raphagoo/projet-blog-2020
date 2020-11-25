@@ -28,17 +28,8 @@ footer {
     margin-right: auto;
 }
 
-/* .menuSearch{
-    float: left;
-    position: fixed;
-    z-index: 2;
-    margin-left: 1%;
-} */
 
 .menuSearch{
     height: fit-content;
 }
 
-.marginContentIndex{
-    margin-left: 18%;
-}

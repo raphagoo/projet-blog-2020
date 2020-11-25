@@ -11,8 +11,8 @@
 			<div
 				class="row ml-2">
 				{# <div class="col-4 pt-3">{{form_row(form.search)}}</div>
-																																																<div class="col-4">{{form_row(form.category)}}</div>
-																																																<div class="col-4 pt-3">{{form_row(form.Search)}}</div> #}
+				<div class="col-4">{{form_row(form.category)}}</div>
+				<div class="col-4 pt-3">{{form_row(form.Search)}}</div> #}
 				{{ form(form)}}
 
 				</div>
@@ -36,19 +36,20 @@
 					</div>
 				</div>
 			</div>
-
-			<div class="example-wrapper mt-5 col-9 marginContentIndex">
-				<h1>Welcome to our blog</h1>
-
-				{% for article in articles %}
-					{% include 'include/article_card.html.twig' %}
-				{% endfor %}
-				{% if articles %}
-					<div class="navigation">
-						{{ knp_pagination_render(articles) }}
-					</div>
-				{% endif %}
-
-			</div>
 		</div>
-	{% endblock %}
+
+		<div class="example-wrapper mt-5 col-7 marginContentIndex">
+			<h1>Welcome to our blog</h1>
+
+			{% for article in articles %}
+				{% include 'include/article_card.html.twig' %}
+			{% endfor %}
+			{% if articles %}
+				<div class="navigation">
+					{{ knp_pagination_render(articles) }}
+				</div>
+			{% endif %}
+
+		</div>
+	</div>
+{% endblock %}
