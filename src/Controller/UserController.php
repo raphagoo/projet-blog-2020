@@ -57,6 +57,27 @@ class UserController extends AbstractController
 
     /**
      * @IsGranted("ROLE_USER")
+     * @Route("/profile", name="profile")
+     * @param ArticleRepository $articleRepository
+     * @return Response
+     */
+    public function profile(ArticleRepository $articleRepository): Response
+    {
+        $user = $this->getUser();
+        $likedArticles = $articleRepository->findLastLikedArticles($user);
+        $sharedArticles = $articleRepository->findLastSharedArticles($user);
+        $commentedArticles = $articleRepository->findLastCommentedArticles($user);
+
+        return $this->render('user/index.html.twig', [
+            'user' => $user,
+            'liked_articles' => $likedArticles,
+            'shared_articles' => $sharedArticles,
+            'commented_articles' => $commentedArticles
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_USER")
      * @Route("/profile/informations", name="profile_private_informations")
      * @param Request $request
      * @param UserRepository $userRepository
@@ -124,18 +145,51 @@ class UserController extends AbstractController
     /**
      * @IsGranted("ROLE_USER")
      * @Route("/profile/likedArticles", name="profile_liked_articles")
-     * @param Request $request
      * @param ArticleRepository $articleRepository
      * @return Response
      */
-    public function profileLikedArticles(Request $request, ArticleRepository $articleRepository): Response
+    public function profileLikedArticles(ArticleRepository $articleRepository): Response
     {
         $user = $this->getUser();
-        $articles = $articleRepository->findLikedArticles($user);
+        $liked_articles = $articleRepository->findLikedArticles($user);
 
         return $this->render('user/liked_articles.html.twig', [
             'user' => $user,
-            'articles' => $articles
+            'liked_articles' => $liked_articles
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/profile/sharedArticles", name="profile_shared_articles")
+     * @param ArticleRepository $articleRepository
+     * @return Response
+     */
+    public function profileSharedArticles(ArticleRepository $articleRepository): Response
+    {
+        $user = $this->getUser();
+        $shared_articles = $articleRepository->findSharedArticles($user);
+
+        return $this->render('user/shared_articles.html.twig', [
+            'user' => $user,
+            'shared_articles' => $shared_articles
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/profile/commentedArticles", name="profile_commented_articles")
+     * @param ArticleRepository $articleRepository
+     * @return Response
+     */
+    public function profileCommentedArticles(ArticleRepository $articleRepository): Response
+    {
+        $user = $this->getUser();
+        $commented_articles = $articleRepository->findCommentedArticles($user);
+
+        return $this->render('user/commented_articles.html.twig', [
+            'user' => $user,
+            'commented_articles' => $commented_articles
         ]);
     }
 }

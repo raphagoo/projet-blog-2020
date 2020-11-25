@@ -112,6 +112,87 @@ class ArticleRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    /**
+     * @param UserInterface $user
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findLastLikedArticles(UserInterface $user)
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.likes', 'l')
+            ->andWhere('l.author = :user')
+            ->setParameter('user', $user)
+            ->orderBy('l.dateLike', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findSharedArticles(UserInterface $user)
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.shares', 's')
+            ->andWhere('s.author = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findLastSharedArticles(UserInterface $user)
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.shares', 's')
+            ->andWhere('s.author = :user')
+            ->setParameter('user', $user)
+            ->orderBy('s.dateShare', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findCommentedArticles(UserInterface $user)
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.comments', 'c')
+            ->andWhere('c.author = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @param UserInterface $user
+     * @return Article[] Returns an array of Article objects
+     */
+    public function findLastCommentedArticles(UserInterface $user)
+    {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.comments', 'c')
+            ->andWhere('c.author = :user')
+            ->setParameter('user', $user)
+            ->orderBy('c.creationDate', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     // $qb = $this->_em->createQueryBuilder();
     // $qb->select('t, c')
     //     ->from('AppBundle:Transactional','t')

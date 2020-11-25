@@ -3,87 +3,38 @@
 {% block title %}Hello DefaultController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    .search { width: 100%;}
-    .pagination-margin{ padding-top: 2%;}
-    img{ width: 50%}
-    .margin-top{ padding-top: 2%; }
-</style>
+    <div class="example-wrapper">
+        <h1>Welcome to our blog</h1>
+        <div class="d-flex">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+        <span>Order by :</span>
+        <div class="sortItem">
+            <span{% if articles.isSorted('a.Title') %} class="sorted"{% endif %}>
+              {{ knp_pagination_sortable(articles, 'Title', 'a.title') }}
+            </span>
+        </div>
+        <div class="sortItem">
+            <span{% if articles.isSorted(['a.publicationDate']) %} class="sorted"{% endif %}>
+              {{ knp_pagination_sortable(articles, 'Release', ['a.publicationDate']) }}
+            </span>
+        </div>
+        <div class="sortItem">
+            <span{% if articles.isSorted(['au.lastName']) %} class="sorted"{% endif %}>
+              {{ knp_pagination_sortable(articles, 'Author', ['au.lastName']) }}
+            </span>
+        </div>
 
-<div class="example-wrapper">
-    <h1>Welcome to our blog</h1>
-<div class="d-flex">
-  {{ form_start(form) }}
-  {{ form_widget(form) }}
-  {{ form_end(form) }}
-  </div>
-  <span>Order by :</span>
-  <div class="sortItem">
-    <span{% if articles.isSorted('a.Title') %} class="sorted"{% endif %}>
-      {{ knp_pagination_sortable(articles, 'Title', 'a.title') }}
-    </span>
-  </div>
-  <div class="sortItem">
-    <span{% if articles.isSorted(['a.publicationDate']) %} class="sorted"{% endif %}>
-      {{ knp_pagination_sortable(articles, 'Release', ['a.publicationDate']) }}
-    </span>
-  </div>
-  <div class="sortItem">
-    <span{% if articles.isSorted(['au.lastName']) %} class="sorted"{% endif %}>
-      {{ knp_pagination_sortable(articles, 'Author', ['au.lastName']) }}
-    </span>
-  </div>
+        {% for article in articles %}
+            {% include 'include/article_card.html.twig' %}
+        {% endfor %}
+        {% if articles %}
+            <div class="navigation">
+                {{ knp_pagination_render(articles) }}
+            </div>
+        {% endif %}
 
-{% for article in articles %}
-<div class="card" style="margin-top: 2%">
-  <div class="card-header">
-   {{ article.author.firstName }} {{ article.author.lastName }}
-   <div class="row">
-     <div class="col-sm-12 col-xs-12">
-       <h2>{{ article.title }}</h2>
-     </div>
-     <div class="col-sm-12 col-xs-12">
-       {{ article.publicationDate|date("d/m/Y H:i:s", "Europe/Paris") }}
-     </div>
-     <div class="col-sm-6 col-xs-6">
-       {{ article.category.name }}
-     </div>
-     <div class="offset-sm-2 col-sm-2 col-xs-2">
-       Likes : {{ article.likes|length }}
-     </div>
-     <div class="col-sm-2 col-xs-2">
-       Shares : {{ article.shares|length }}
-     </div>
-   </div>
-  </div>
-  
-  <div class="card-body">
-    <img id="article_{{ article.id }}" onerror="standby('article_{{ article.id }}')" style="max-width: 400px" class="articleImage rounded mx-auto d-block" src="{{ asset('uploads/images/' ~ article.image) }}" alt="article picture">
-    <p class="card-text">
-      {{ article.content|length > 300 ? article.content|slice(0, 300) ~ '...' : article.content}}
-    </p>
-
-    <div class="margin-top">
-
-
-<a href="{{ path('viewArticle', {'idArticle': article.id}) }}" class="btn btn-primary">View article</a>
-
-{% if app.user and is_granted('ROLE_ADMIN')%}
-    <a href="{{ path('editArticle', {'idArticle': article.id}) }}" class="btn btn-primary">Edit article</a>
-    
-{% endif %}
-  </div>
-</div>
-  
-</div>
-{% endfor %}
-  {% if articles %}
-    <div class="navigation">
-      {{ knp_pagination_render(articles) }}
     </div>
-  {% endif %}
-
-</div>
 {% endblock %}
