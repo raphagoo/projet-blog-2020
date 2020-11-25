@@ -50,7 +50,7 @@ class ArticleRepository extends ServiceEntityRepository
             LEFT JOIN a.author au
             LEFT JOIN a.tag t
             WHERE a.title LIKE :searchTerm
-            AND (t.name LIKE :searchTerm OR a.title LIKE :searchTerm AND t.name LIKE :searchTerm)'
+            OR t.name LIKE :searchTerm'
             );
         } else {
             $query = $entityManager->createQuery(
