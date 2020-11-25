@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  */
@@ -71,6 +72,11 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=Share::class, mappedBy="author", orphanRemoval=true)
      */
     private $shares;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $newsletter;
 
     public function __construct()
     {
@@ -312,5 +318,25 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function getNewsletter(): ?bool
+    {
+        return $this->newsletter;
+    }
+
+    public function setNewsletter(bool $newsletter): self
+    {
+        $this->newsletter = $newsletter;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function defaultNewsletter()
+    {
+        $this->newsletter = false;
     }
 }

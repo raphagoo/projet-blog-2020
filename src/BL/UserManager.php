@@ -32,4 +32,12 @@ class UserManager
     public function findUserById($idUser){
         return $this->em->getRepository(User::class)->find($idUser);
     }
+
+    /**
+     * @param User $user
+     */
+    public function GetInscriptionData(User $user){
+        $this->em->persist($user);
+        $this->em->flush();
+    }
 }

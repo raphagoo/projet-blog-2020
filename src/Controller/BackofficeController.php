@@ -8,9 +8,11 @@ use App\BL\UserManager;
 use App\Entity\Article;
 use App\Entity\User;
 use App\Form\ArticleFormType;
+use App\Form\SearchCommentFormType;
 use App\Form\UserCreateFromAdminType;
 use App\Form\UserCreateType;
 use App\Repository\UserRepository;
+use App\Form\SearchFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -52,21 +54,33 @@ class BackofficeController extends AbstractController
 
     /**
      * @Route("/backoffice", name="backoffice")
+     * @return Response
      */
     public function index(): Response
     {
+        $recentArticles = $this->articleManager->getRecentArticlesBack();
+        $nbWaitingComments = $this->commentManager->countWaitingComments();
         return $this->render('backoffice/index.html.twig', [
-            'controller_name' => 'BackofficeController',
+            'controller_name' => 'BackofficeController', 'recentArticles' => $recentArticles, 'nbWaitingComments' => $nbWaitingComments
         ]);
     }
 
     /**
      * @Route ("/backoffice/article", name="backofficeArticle")
+     * @param Request $request
+     * @return Response
      */
-    public function articles(): Response
+    public function articles(Request $request): Response
     {
-        $articles = $this->articleManager->getArticles();
-        return $this->render('backoffice/articles.html.twig', ['articles' => $articles]);
+        $form = $this->createForm(SearchFormType::class);
+        $articles = $this->articleManager->listArticles($request);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $searchTerm = $form->get('search')->getData();
+            $categoryTerm = $form->get('category')->getData();
+            $articles = $this->articleManager->listArticles($request, $searchTerm, $categoryTerm);
+        }
+        return $this->render('backoffice/articles.html.twig', ['articles' => $articles, 'form' => $form->createView()]);
     }
 
     /**
@@ -90,12 +104,20 @@ class BackofficeController extends AbstractController
 
     /**
      * @Route ("/backoffice/comments", name="backofficeComment")
+     * @param Request $request
      * @return Response
      */
-    public function commentList()
+    public function commentList(Request $request)
     {
-        $comments = $this->commentManager->getComments();
-        return $this->render('backoffice/comments.html.twig', ['comments' => $comments]);
+        $comments = $this->commentManager->listComments($request);
+        $form = $this->createForm(SearchCommentFormType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $searchTerm = $form->get('search')->getData();
+            $statusTerm = $form->get('approved')->getData();
+            $comments = $this->commentManager->listComments($request, $searchTerm, $statusTerm);
+        }
+        return $this->render('backoffice/comments.html.twig', ['comments' => $comments, 'form' => $form->createView()]);
     }
 
     /**

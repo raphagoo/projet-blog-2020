@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @method Comment|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +16,50 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CommentRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var PaginatorInterface
+     */
+    private $knp;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $knp)
     {
         parent::__construct($registry, Comment::class);
+        $this->knp = $knp;
+    }
+
+    public function listComments(Request $request, $searchTerm = null, $statusTerm = [null])
+    {
+        $entityManager = $this->getEntityManager();
+        if(in_array(NULL, $statusTerm)){
+            $query = $entityManager->createQuery(
+                'SELECT c
+            FROM App\Entity\Comment c
+            LEFT JOIN c.article a
+            LEFT JOIN c.author au
+            WHERE a.title LIKE :searchTerm
+            AND c.approved IN (:statusTerm) OR c.approved IS NULL'
+            );
+        }
+        else{
+            $query = $entityManager->createQuery(
+                'SELECT c
+            FROM App\Entity\Comment c
+            LEFT JOIN c.article a
+            LEFT JOIN c.author au
+            WHERE a.title LIKE :searchTerm
+            AND c.approved IN (:statusTerm)'
+            );
+        }
+
+        $query->setParameter('searchTerm', '%'.$searchTerm.'%');
+        $query->setParameter('statusTerm', $statusTerm);
+
+        return $this->knp->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            5 /*limit per page*/
+        );
+
     }
 
     // /**

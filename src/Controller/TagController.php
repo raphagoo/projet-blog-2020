@@ -6,7 +6,9 @@ use App\BL\TagManager;
 use App\Entity\Tag;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\TagFormType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +28,7 @@ class TagController extends AbstractController
      */
     private $tagManager;
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/tag", name="tag")
      */
     public function index(): Response
@@ -36,6 +39,7 @@ class TagController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("tag/add", name="addTag")
      * @param Request $request
      * @return Response
@@ -57,6 +61,7 @@ class TagController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("tag/edit/{idTag}", name="editTag")
      * @param $idTag
      * @param Request $request
@@ -78,6 +83,7 @@ class TagController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("tag/delete/{idTag}",name="deleteTag")
      * @param $idTag
      * @return RedirectResponse|Response

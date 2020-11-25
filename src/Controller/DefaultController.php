@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use App\BL\ArticleManager;
+use App\BL\UserManager;
+use App\Form\NewsletterFormType;
 use App\Form\SearchFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\ContactFormType;
@@ -20,11 +24,16 @@ class DefaultController extends AbstractController
      */
     private $articleManager;
 
+    /**
+     * @var UserManager
+     */
+    private $userManager;
+
 
     public function __construct(EntityManagerInterface $em)
     {
-
         $this->articleManager = new ArticleManager($em);
+        $this->userManager = new UserManager($em);
     }
 
     /**
@@ -39,7 +48,8 @@ class DefaultController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $searchTerm = $form->get('search')->getData();
-            $articles = $this->articleManager->listArticles($request, $searchTerm);
+            $categoryTerm = $form->get('category')->getData();
+            $articles = $this->articleManager->listArticles($request, $searchTerm, $categoryTerm);
         }
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController', 'articles' => $articles, 'form' => $form->createView()
@@ -70,7 +80,7 @@ class DefaultController extends AbstractController
             
             $this->addFlash(
                 'info',
-                'Message sumbit'
+                'Message submit'
             );
         }
 
@@ -78,6 +88,24 @@ class DefaultController extends AbstractController
             'controller_name' => 'DefaultController',
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/newsletter", name="newsletter")
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function newsletter(Request $request)
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(NewsletterFormType::class, $user);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $this->userManager->GetInscriptionData($user);
+            return $this->redirectToRoute('default');
+        }
+        return $this->render('default/newsletter.html.twig', ['form' => $form->createView()]);
     }
 
     

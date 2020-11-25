@@ -8,6 +8,7 @@ use App\Form\UserCreateType;
 use App\Form\UserUpdateType;
 use App\Repository\UserRepository;
 use App\Repository\ArticleRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +21,7 @@ class UserController extends AbstractController
     /**
      * @Route("/register", name="register")
      * @param Request $request
+     * @param UserRepository $userRepository
      * @return Response
      */
     public function register(Request $request, UserRepository $userRepository): Response
@@ -54,8 +56,10 @@ class UserController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/profile/informations", name="profile_private_informations")
      * @param Request $request
+     * @param UserRepository $userRepository
      * @return Response
      */
     public function edit_profile(Request $request, UserRepository $userRepository): Response
@@ -86,6 +90,7 @@ class UserController extends AbstractController
 
     // See https://openclassrooms.com/forum/sujet/modifier-mon-mot-de-passe
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/profile/editPassword", name="profile_edit_password")
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -117,6 +122,7 @@ class UserController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/profile/likedArticles", name="profile_liked_articles")
      * @param Request $request
      * @param ArticleRepository $articleRepository

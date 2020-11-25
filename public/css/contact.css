@@ -11,3 +11,10 @@
 .contentCard{
     text-align: justify;
 }
+.imgFoot{
+    cursor: pointer;
+    max-width: 30px;
+}
+.btnSignin {
+    margin-right: 10px;
+}

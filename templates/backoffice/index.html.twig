@@ -21,10 +21,57 @@
 	</style>
 
 	<h1 class="text-center mt-2">BackOffice</h1>
-
 	<div class="example-wrapper d-flex justify-content-center mb-5">
-		<a class="w-25 p-3 btn btn-success m-2 " href="{{ path('backofficeArticle') }}">Articles</a>
-		<a class="w-25 p-3 btn btn-success m-2" href="{{ path('backofficeComment') }}">Comments</a>
+		<a class="w-25 p-4 btn btn-success m-2 " href="{{ path('backofficeArticle') }}">Articles</a>
+		<a class="w-25 p-3 btn btn-success m-2" href="{{ path('backofficeComment') }}">
+			Comments
+			<button class="btn btn-danger"><i class="fa fa-bell"></i> {{ nbWaitingComments }}</button>
+		</a>
 	</div>
-	<div class="test"></div>
+	<h2 class="text-center">Recent Articles</h2>
+	<div class="recentArticlesContainer">
+		{% for article in recentArticles %}
+		<div class="card" style="margin-top: 2%">
+			<div class="card-header">
+				{{ article.author.firstName }} {{ article.author.lastName }}
+				<div class="row">
+					<div class="col-sm-12 col-xs-12">
+						<h2>{{ article.title }}</h2>
+					</div>
+					<div class="col-sm-12 col-xs-12">
+						{{ article.publicationDate|date("d/m/Y H:i:s", "Europe/Paris") }}
+					</div>
+					<div class="col-sm-6 col-xs-6">
+						{{ article.category.name }}
+					</div>
+					<div class="offset-sm-2 col-sm-2 col-xs-2">
+						Likes : {{ article.likes|length }}
+					</div>
+					<div class="col-sm-2 col-xs-2">
+						Shares : {{ article.shares|length }}
+					</div>
+				</div>
+			</div>
+
+			<div class="card-body">
+				<img id="article_{{ article.id }}" onerror="standby('article_{{ article.id }}')" style="max-width: 400px" class="articleImage rounded mx-auto d-block" src="{{ asset('uploads/images/' ~ article.image) }}" alt="article picture">
+				<p class="card-text">
+					{{ article.content|length > 300 ? article.content|slice(0, 300) ~ '...' : article.content}}
+				</p>
+
+				<div class="margin-top">
+
+
+					<a href="{{ path('viewArticle', {'idArticle': article.id}) }}" class="btn btn-primary">View article</a>
+
+					{% if app.user and is_granted('ROLE_ADMIN')%}
+						<a href="{{ path('editArticle', {'idArticle': article.id}) }}" class="btn btn-primary">Edit article</a>
+
+					{% endif %}
+				</div>
+			</div>
+
+		</div>
+		{% endfor %}
+	</div>
 {% endblock %}

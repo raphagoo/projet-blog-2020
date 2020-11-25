@@ -3,7 +3,13 @@
 {% block title %}Backoffice - Article{% endblock %}
 
 {% block body %}
-    {{ comment.content }}
-    <a href="{{ path('approveComment', {'idComment': comment.id, 'approved': 'true'}) }}"><button class="btn btn-success">Approve</button></a>
-    <a href="{{ path('approveComment', {'idComment': comment.id, 'approved': 0}) }}"><button class="btn btn-danger">Refuse</button></a>
+    <div class="card m-5 mx-auto w-50">
+        <div class="card-body">
+            <h5 class="card-title">Comment from {{ comment.article.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Author : {{ comment.author.email }}</h6>
+            <p class="card-text">{{ comment.content }}</p>
+            <a href="{{ path('approveComment', {'idComment': comment.id, 'approved': 'true'}) }}"><button class="btn btn-success">Approve</button></a>
+            <a href="{{ path('approveComment', {'idComment': comment.id, 'approved': 0}) }}"><button class="btn btn-danger">Refuse</button></a>
+        </div>
+    </div>
 {% endblock %}
