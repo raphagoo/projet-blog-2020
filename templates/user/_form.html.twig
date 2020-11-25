@@ -1,5 +1,43 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
+    <meter min="0" value="0" low="2" high="3" max="4" optimum="4" id="password-strength-meter"></meter>
+    <p id="password-strength-text"></p>
     <button class="btn btn btn-success mb-2">{{ button_label|default('Save') }}</button>
 
 {{ form_end(form) }}
+
+<script>
+    const strength = {
+        0: "Très faible",
+        1: "Faible",
+        2: "Moyen",
+        3: "Bon",
+        4: "Très bon"
+    };
+    let password = document.getElementById('user_create_password_first');
+    let meter = document.getElementById('password-strength-meter');
+    let text = document.getElementById('password-strength-text');
+
+    password.addEventListener('input', function() {
+        let val = password.value;
+        let result = zxcvbn(val);
+
+        // Update the password strength meter
+        meter.value = result.score;
+
+        // Update the text indicator
+        if (val !== "") {
+            text.innerHTML = "Force du mot de passe : " + strength[result.score];
+        } else {
+            text.innerHTML = "";
+        }
+
+        if(result.score >= 2){
+            document.getElementsByClassName("btn-success")[0].disabled = false;
+        }
+        else if(result.score < 2){
+            document.getElementsByClassName("btn-success")[0].disabled = true;
+        }
+    });
+
+</script>
