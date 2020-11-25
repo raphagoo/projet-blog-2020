@@ -14,11 +14,19 @@ class UserCreateType extends AbstractType
     /** @var UserPasswordEncoderInterface */
     private $encoder;
 
+    /**
+     * UserCreateType constructor.
+     * @param UserPasswordEncoderInterface $encoder
+     */
     public function __construct(UserPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $encoder = $this->encoder;
@@ -33,6 +41,9 @@ class UserCreateType extends AbstractType
         ;
     }
 
+    /**
+     * @return string|null
+     */
     public function getParent()
     {
         return UserType::class;

@@ -8,6 +8,7 @@ use App\Form\UserCreateType;
 use App\Form\UserUpdateType;
 use App\Repository\UserRepository;
 use App\Repository\ArticleRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-
+/**
+ * Class UserController
+ * @package App\Controller
+ */
 class UserController extends AbstractController
 {
     /**
@@ -23,6 +27,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @param UserRepository $userRepository
      * @return Response
+     * @throws NonUniqueResultException
      */
     public function register(Request $request, UserRepository $userRepository): Response
     {
@@ -82,6 +87,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @param UserRepository $userRepository
      * @return Response
+     * @throws NonUniqueResultException
      */
     public function edit_profile(Request $request, UserRepository $userRepository): Response
     {

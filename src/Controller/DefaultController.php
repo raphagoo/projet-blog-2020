@@ -15,10 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Form\ContactFormType;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class DefaultController
+ * @package App\Controller
+ */
 class DefaultController extends AbstractController
 {
 
-    private $em;
     /**
      * @var ArticleManager
      */
@@ -30,6 +33,10 @@ class DefaultController extends AbstractController
     private $userManager;
 
 
+    /**
+     * DefaultController constructor.
+     * @param EntityManagerInterface $em
+     */
     public function __construct(EntityManagerInterface $em)
     {
         $this->articleManager = new ArticleManager($em);

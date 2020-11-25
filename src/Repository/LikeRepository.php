@@ -14,6 +14,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class LikeRepository extends ServiceEntityRepository
 {
+    /**
+     * LikeRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Like::class);

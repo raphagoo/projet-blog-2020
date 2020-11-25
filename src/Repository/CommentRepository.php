@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,12 +22,23 @@ class CommentRepository extends ServiceEntityRepository
      */
     private $knp;
 
+    /**
+     * CommentRepository constructor.
+     * @param ManagerRegistry $registry
+     * @param PaginatorInterface $knp
+     */
     public function __construct(ManagerRegistry $registry, PaginatorInterface $knp)
     {
         parent::__construct($registry, Comment::class);
         $this->knp = $knp;
     }
 
+    /**
+     * @param Request $request
+     * @param null $searchTerm
+     * @param null[] $statusTerm
+     * @return PaginationInterface
+     */
     public function listComments(Request $request, $searchTerm = null, $statusTerm = [null])
     {
         $entityManager = $this->getEntityManager();

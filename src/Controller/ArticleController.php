@@ -25,6 +25,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
+/**
+ * Class ArticleController
+ * @package App\Controller
+ */
 class ArticleController extends AbstractController
 {
     /**
@@ -52,6 +56,10 @@ class ArticleController extends AbstractController
      */
     private $shareManager;
 
+    /**
+     * ArticleController constructor.
+     * @param EntityManagerInterface $em
+     */
     public function __construct(EntityManagerInterface $em)
     {
 

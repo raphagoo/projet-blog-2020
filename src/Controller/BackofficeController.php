@@ -23,6 +23,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class BackofficeController
+ * @package App\Controller
+ */
 class BackofficeController extends AbstractController
 {
     /**
@@ -43,6 +47,10 @@ class BackofficeController extends AbstractController
      */
     private $commentManager;
 
+    /**
+     * BackofficeController constructor.
+     * @param EntityManagerInterface $em
+     */
     public function __construct(EntityManagerInterface $em)
     {
 

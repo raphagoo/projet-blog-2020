@@ -13,20 +13,33 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-
+/**
+ * Class TagController
+ * @package App\Controller
+ */
 class TagController extends AbstractController
+{
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
 
-{public function __construct(EntityManagerInterface $em)
+    /**
+     * @var TagManager
+     */
+    private $tagManager;
+
+    /**
+     * TagController constructor.
+     * @param EntityManagerInterface $em
+     */
+    public function __construct(EntityManagerInterface $em)
     {
 
         $this->tagManager = new TagManager($em);
         $this->em = $em;
     }
 
-    /**
-     * @var TagManager
-     */
-    private $tagManager;
     /**
      * @IsGranted("ROLE_ADMIN")
      * @Route("/tag", name="tag")

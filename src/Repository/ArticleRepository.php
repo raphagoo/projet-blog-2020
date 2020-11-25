@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Article;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,12 +22,24 @@ class ArticleRepository extends ServiceEntityRepository
      * @var PaginatorInterface
      */
     private $knp;
+
+    /**
+     * ArticleRepository constructor.
+     * @param ManagerRegistry $registry
+     * @param PaginatorInterface $knp
+     */
     public function __construct(ManagerRegistry $registry, PaginatorInterface $knp)
     {
         parent::__construct($registry, Article::class);
         $this->knp = $knp;
     }
 
+    /**
+     * @param Request $request
+     * @param null $searchTerm
+     * @param array $categoryTerm
+     * @return PaginationInterface
+     */
     public function listArticles(Request $request, $searchTerm = null, $categoryTerm = [])
     {
         $entityManager = $this->getEntityManager();

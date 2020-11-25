@@ -8,6 +8,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class UserUpdateType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -16,6 +20,9 @@ class UserUpdateType extends AbstractType
         ;
     }
 
+    /**
+     * @return string|null
+     */
     public function getParent()
     {
         return UserType::class;

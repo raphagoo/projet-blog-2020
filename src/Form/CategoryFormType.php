@@ -11,6 +11,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CategoryFormType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $category
+     */
     public function buildForm(FormBuilderInterface $builder, array $category)
     {
         $builder

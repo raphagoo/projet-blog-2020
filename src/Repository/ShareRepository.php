@@ -14,6 +14,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ShareRepository extends ServiceEntityRepository
 {
+    /**
+     * ShareRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Share::class);

@@ -13,11 +13,16 @@ use App\Form\CategoryFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-;
-
+/**
+ * Class CategoryController
+ * @package App\Controller
+ */
 class CategoryController extends AbstractController
 {
-
+    /**
+     * CategoryController constructor.
+     * @param EntityManagerInterface $em
+     */
     public function __construct(EntityManagerInterface $em)
     {
 

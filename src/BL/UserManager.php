@@ -7,8 +7,16 @@ namespace App\BL;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Class UserManager
+ * @package App\BL
+ */
 class UserManager
 {
+    /**
+     * UserManager constructor.
+     * @param EntityManagerInterface $em
+     */
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;

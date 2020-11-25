@@ -11,6 +11,10 @@ use Doctrine\ORM\EntityManagerInterface;
 class TagManager
 {
 
+    /**
+     * TagManager constructor.
+     * @param EntityManagerInterface $em
+     */
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;

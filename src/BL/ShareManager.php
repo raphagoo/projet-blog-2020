@@ -7,6 +7,10 @@ namespace App\BL;
 use App\Entity\Share;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Class ShareManager
+ * @package App\BL
+ */
 class ShareManager
 {
     public function __construct(EntityManagerInterface $em)
@@ -26,6 +30,9 @@ class ShareManager
         $this->em->flush();
     }
 
+    /**
+     * @return Share[]|array
+     */
     public function getShares(){
         return $this->em->getRepository(Share::class)->findAll();
     }

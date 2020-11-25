@@ -14,6 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ArticleManager
 {
+    /**
+     * ArticleManager constructor.
+     * @param EntityManagerInterface $em
+     */
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
@@ -30,6 +34,12 @@ class ArticleManager
         return $this->em->getRepository(Article::class)->findAll();
     }
 
+    /**
+     * @param Request $request
+     * @param null $searchTerm
+     * @param array $categoryTerm
+     * @return mixed
+     */
     public function listArticles(Request $request, $searchTerm = null, $categoryTerm = [])
     {
         return $this->em->getRepository(Article::class)->listArticles($request,$searchTerm, $categoryTerm);
@@ -54,11 +64,18 @@ class ArticleManager
         return $this->em->getRepository(Article::class)->find($idArticle);
     }
 
+    /**
+     * @param $idArticle
+     * @return mixed
+     */
     public function getRecentArticles($idArticle)
     {
         return $this->em->getRepository(Article::class)->findRecents($idArticle);
     }
 
+    /**
+     * @return mixed
+     */
     public function getRecentArticlesBack()
     {
         return $this->em->getRepository(Article::class)->findRecentsBack();

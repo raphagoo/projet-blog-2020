@@ -15,11 +15,19 @@ class UserCreateFromAdminType extends AbstractType
     /** @var UserPasswordEncoderInterface */
     private $encoder;
 
+    /**
+     * UserCreateFromAdminType constructor.
+     * @param UserPasswordEncoderInterface $encoder
+     */
     public function __construct(UserPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $encoder = $this->encoder;
@@ -41,6 +49,9 @@ class UserCreateFromAdminType extends AbstractType
         ;
     }
 
+    /**
+     * @return string|null
+     */
     public function getParent()
     {
         return UserType::class;
