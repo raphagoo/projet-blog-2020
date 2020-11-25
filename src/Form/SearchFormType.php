@@ -34,7 +34,7 @@ class SearchFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('search', TextType::class, ['attr' => ['placeholder' => 'Search for a title'], 'label' => false, 'required' => false])
+            ->add('search', TextType::class, ['attr' => ['placeholder' => 'Search for a title or a tag'], 'label' => false, 'required' => false])
             ->add('category',EntityType::class,[
                 'class' => Category::class,
                 'choice_label' => 'name',
@@ -43,7 +43,7 @@ class SearchFormType extends AbstractType
                 },
                 'multiple'=> true,
                 'expanded'=> true,
-                'label' => 'Catégorie : ',
+                'label' => 'Categories : ',
                 'mapped' => true,
                 'data' => $this->em->getRepository(Category::class)->findAll()
             ])

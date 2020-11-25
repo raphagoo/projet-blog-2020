@@ -19,6 +19,12 @@
 					<p class="card-text contentCard">{{ article.content }}</p>
 					<span>Category :</span>
 					<span class="btn btn-outline-warning">{{ article.category.name }}</span><br>
+					<span>Tags :</span>
+					<ul class="list-group w-25">
+					{% for tag in article.tag %}
+						<li class="list-group-item">{{ tag.name }}</li>
+					{% endfor %}
+					</ul>
 					<span>Likes :</span>
 					<span class="badge badge-secondary">{{ nbLikes }}</span>
 					<span>Shares :</span>

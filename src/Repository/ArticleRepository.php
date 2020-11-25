@@ -48,7 +48,9 @@ class ArticleRepository extends ServiceEntityRepository
                 'SELECT a
             FROM App\Entity\Article a
             LEFT JOIN a.author au
-            WHERE a.title LIKE :searchTerm'
+            LEFT JOIN a.tag t
+            WHERE a.title LIKE :searchTerm
+            AND (t.name LIKE :searchTerm OR a.title LIKE :searchTerm AND t.name LIKE :searchTerm)'
             );
         }
         else {
@@ -56,7 +58,9 @@ class ArticleRepository extends ServiceEntityRepository
                 'SELECT a
             FROM App\Entity\Article a
             LEFT JOIN a.author au
+            LEFT JOIN a.tag t
             WHERE a.title LIKE :searchTerm
+            OR t.name LIKE :searchTerm
             AND a.category IN (:categoryTerm)'
             );
             $query->setParameter('categoryTerm', $categoryTerm);
