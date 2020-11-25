@@ -36,9 +36,10 @@ class AppFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-        $userExists = $manager->getRepository(User::class)->findOneBy(['email' => 'admin.admin@fixture.fr']);
-        if(!$userExists) {
-            // create user
+        $adminExists = $manager->getRepository(User::class)->findOneBy(['email' => 'admin.admin@fixture.fr']);
+        $userExists = $manager->getRepository(User::class)->findOneBy(['email' => 'user.user@fixture.fr']);
+        if(!$adminExists) {
+            // create admin
             $user = new User();
             $user->setEmail('admin.admin@fixture.fr');
             $user->setFirstName('Admin');
@@ -50,6 +51,20 @@ class AppFixtures extends Fixture
             $manager->persist($user);
             $manager->flush();
         }
+        if(!$userExists) {
+            // create user
+            $user = new User();
+            $user->setEmail('user.user@fixture.fr');
+            $user->setFirstName('User');
+            $user->setLastName('Fixtures');
+            $user->setRoles(['ROLE_USER']);
+            $user->setPassword('password');
+            $password = $this->encoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($password);
+            $manager->persist($user);
+            $manager->flush();
+        }
+
 
         $categoryExists = $manager->getRepository(Category::class)->findOneBy(['name' => 'Politic']);
         if(!$categoryExists) {
@@ -67,8 +82,8 @@ class AppFixtures extends Fixture
             $article = new Article();
             $article->setTitle('Article '.$i);
             $article->setSubtitle('Subtitle' .$i);
-            if($userExists){
-                $article->setAuthor($userExists);
+            if($adminExists){
+                $article->setAuthor($adminExists);
             }
             else {
                 $article->setAuthor($user);
