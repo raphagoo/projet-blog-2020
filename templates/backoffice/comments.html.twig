@@ -1,29 +1,38 @@
-
-
 {% extends 'base.html.twig' %}
 
+{% block title %}Backoffice - Comments
+{% endblock %}
 {% block body %}
-<div class="example-wrapper">
-    <div class="d-flex">
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
-    </div>
-    <div class="sortItem">
-    				<span{% if comments.isSorted('a.Title') %} class="sorted"{% endif %}>
-    				  {{ knp_pagination_sortable(comments, 'Article', 'a.title') }}
+
+<div class="row">
+	<div class="col-2 shadow-lg p-3 mb-5 ml-5 mt-5 bg-white rounded menuSearch">
+		<div class="d-flex">
+			{{ form_start(form) }}
+			{{ form_widget(form) }}
+			{{ form_end(form) }}
+		</div>
+		<div class="sortItem mb-2">
+			<span {% if comments.isSorted('a.Title') %} class="sorted" {% endif %}>
+				{{ knp_pagination_sortable(comments, 'Article', 'a.title') }}
+			</span>
+		</div>
+		<div class="sortItem mb-2">
+			<span {% if comments.isSorted('c.approved') %} class="sorted" {% endif %}>
+				{{ knp_pagination_sortable(comments, 'Status', 'c.approved') }}
+			</span>
+		</div>
+		<div class="sortItem mb-2">
+			<span {% if comments.isSorted('au.email') %} class="sorted" {% endif %}>
+				{{ knp_pagination_sortable(comments, 'Author\'s email', 'au.email') }}
     				</span>
     </div>
-    <div class="sortItem">
-    				<span{% if comments.isSorted('c.approved') %} class="sorted"{% endif %}>
-    				  {{ knp_pagination_sortable(comments, 'Status', 'c.approved') }}
-    				</span>
     </div>
-    <div class="sortItem">
-    				<span{% if comments.isSorted('au.email') %} class="sorted"{% endif %}>
-    				  {{ knp_pagination_sortable(comments, 'Author\'s email', 'au.email') }}
-    				</span>
-    </div>
+
+  <div class="container mt-5">
+
+  <div class="col s10">
+  <h1 class="mb-4">Backoffice - Comments</h1>
+
     <table class="table">
     <thead>
     <tr>
@@ -53,11 +62,12 @@
     {% endfor %}
     </tbody>
 </table>
+</div>
+</div>
 {% if comments %}
     <div class="navigation">
         {{ knp_pagination_render(comments) }}
     </div>
 {% endif %}
-    
 </div>
 {% endblock %}

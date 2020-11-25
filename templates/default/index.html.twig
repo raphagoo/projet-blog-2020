@@ -4,48 +4,51 @@
 {% endblock %}
 
 {% block body %}
+	<div class="row">
 
+		<div class="col-2 shadow-lg p-3 mb-5 ml-4 mt-5 bg-white rounded menuSearch position-fixed">
+			{{form_start(form)}}
+			<div
+				class="row ml-2">
+				{# <div class="col-4 pt-3">{{form_row(form.search)}}</div>
+																																																<div class="col-4">{{form_row(form.category)}}</div>
+																																																<div class="col-4 pt-3">{{form_row(form.Search)}}</div> #}
+				{{ form(form)}}
 
-	<div class="container mt-5">
-		<h1>Welcome to our blog</h1>
-		{# <div class="d-flex"> #}
-		{{form_start(form)}}
-		<div class="row justify-content-start">
-			<div class="col-4 pt-3">{{form_row(form.search)}}</div>
-			<div class="col-4">{{form_row(form.category)}}</div>
-			<div class="col-4 pt-3">{{form_row(form.Search)}}</div>
+				</div>
+				{{form_end(form)}}
+				<div class="row justify-content-start">
 
-		</div>
-		{{form_end(form)}}
-
-		<span>
-			Order by :
-		</span>
-
-		<div class="sortItem">
-			<span {% if articles.isSorted('a.Title') %} class="sorted" {% endif %}>
-				{{ knp_pagination_sortable(articles, 'Title', 'a.title') }}
-			</span>
-		</div>
-		<div class="sortItem">
-			<span {% if articles.isSorted(['a.publicationDate']) %} class="sorted" {% endif %}>
-				{{ knp_pagination_sortable(articles, 'Release', ['a.publicationDate']) }}
-			</span>
-		</div>
-		<div class="sortItem">
-			<span {% if articles.isSorted(['au.lastName']) %} class="sorted" {% endif %}>
-				{{ knp_pagination_sortable(articles, 'Author', ['au.lastName']) }}
-			</span>
-		</div>
-
-		{% for article in articles %}
-			{% include 'include/article_card.html.twig' %}
-		{% endfor %}
-		{% if articles %}
-			<div class="navigation">
-				{{ knp_pagination_render(articles) }}
+					<div class="sortItem mx-2">
+						<span {% if articles.isSorted('a.Title') %} class="sorted" {% endif %}>
+							{{ knp_pagination_sortable(articles, 'Title', 'a.title') }}
+						</span>
+					</div>
+					<div class="sortItem mx-2">
+						<span {% if articles.isSorted(['a.publicationDate']) %} class="sorted" {% endif %}>
+							{{ knp_pagination_sortable(articles, 'Release', ['a.publicationDate']) }}
+						</span>
+					</div>
+					<div class="sortItem mx-2">
+						<span {% if articles.isSorted(['au.lastName']) %} class="sorted" {% endif %}>
+							{{ knp_pagination_sortable(articles, 'Author', ['au.lastName']) }}
+						</span>
+					</div>
+				</div>
 			</div>
-		{% endif %}
 
-	</div>
-{% endblock %}
+			<div class="example-wrapper mt-5 col-9 marginContentIndex">
+				<h1>Welcome to our blog</h1>
+
+				{% for article in articles %}
+					{% include 'include/article_card.html.twig' %}
+				{% endfor %}
+				{% if articles %}
+					<div class="navigation">
+						{{ knp_pagination_render(articles) }}
+					</div>
+				{% endif %}
+
+			</div>
+		</div>
+	{% endblock %}

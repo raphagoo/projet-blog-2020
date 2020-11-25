@@ -4,27 +4,34 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container mt-5">
-		<div class="row">
-			<div class="col s12">
+	{# <div class="container mt-5"> #}
+	<div class="row">
+		<div class="col-2 shadow-lg p-3 mb-5 ml-5 mt-5 bg-white rounded menuSearch">
+			<div class="d-flex">
+				{{ form_start(form) }}
+				{{ form_widget(form) }}
+				{{ form_end(form) }}
+			</div>
 
+			<div class="sortItem mb-2">
+				<span {% if articles.isSorted('a.Title') %} class="sorted" {% endif %}>
+					{{ knp_pagination_sortable(articles, 'Title', 'a.title') }}
+				</span>
+			</div>
+			<div class="sortItem">
+				<span {% if articles.isSorted('a.publicationDate') %} class="sorted" {% endif %}>
+					{{ knp_pagination_sortable(articles, 'Release', 'a.publicationDate') }}
+				</span>
+			</div>
+		</div>
+		<div class="container mt-5">
+
+			<div class="col s10">
 				<h1>Backoffice - Articles</h1>
-				<a href="{{ path('backofficeAddArticle') }}"><button class="btn btn-primary">Add article</button></a>
-				<div class="d-flex">
-					{{ form_start(form) }}
-					{{ form_widget(form) }}
-					{{ form_end(form) }}
-				</div>
-				<div class="sortItem">
-    				<span{% if articles.isSorted('a.Title') %} class="sorted"{% endif %}>
-    				  {{ knp_pagination_sortable(articles, 'Title', 'a.title') }}
-    				</span>
-				</div>
-				<div class="sortItem">
-    				<span{% if articles.isSorted('a.publicationDate') %} class="sorted"{% endif %}>
-    				  {{ knp_pagination_sortable(articles, 'Release', 'a.publicationDate') }}
-    				</span>
-				</div>
+				<a href="{{ path('backofficeAddArticle') }}">
+					<button class="btn btn-success mb-4">Add article</button>
+				</a>
+
 				<table class="table">
 					<thead>
 						<tr class="row">
@@ -49,12 +56,14 @@
 							</tr>
 						{% endfor %}
 					</tbody>
-			</table>
-			{% if articles %}
-				<div class="navigation">
-					{{ knp_pagination_render(articles) }}
-				</div>
-			{% endif %}
+				</table>
+				{% if articles %}
+					<div class="navigation">
+						{{ knp_pagination_render(articles) }}
+					</div>
+				{% endif %}
+			</div>
 		</div>
 	</div>
-</div>{% endblock %}
+	{# </div> #}
+{% endblock %}
